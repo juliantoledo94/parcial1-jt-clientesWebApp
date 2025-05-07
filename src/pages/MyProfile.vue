@@ -1,8 +1,9 @@
 <script>
 import MainH1 from '../components/MainH1.vue';
 import { subscribeToUserState } from '../services/auth';
+import { getPostsByUserId } from '../services/posts';
 
-let unsubAuth = () => {};
+let unsubAuth = () => { };
 
 export default {
     name: 'MyProfile',
@@ -16,10 +17,22 @@ export default {
                 bio: null,
                 career: null,
             },
+            posts: []
         }
     },
     mounted() {
-        unsubAuth = subscribeToUserState(newUserState => this.user = newUserState);
+        unsubAuth = subscribeToUserState(async newUserState => {
+            this.user = newUserState
+
+            if (this.user.id) {
+                try {
+                    this.posts = await getPostsByUserId(this.user.id)
+                } catch (error) {
+                    console.error("Error al obtener los datos del perfil: ", error);
+                }
+            }
+
+        });
     },
     unmounted() {
         unsubAuth();
@@ -44,4 +57,21 @@ export default {
         <dt class="mb-0.5 font-bold">Carrera</dt>
         <dd class="mb-4">{{ user.career || 'Sin especificar' }}</dd>
     </dl>
+
+    <section class="mt-12">
+        <h2 class="text-xl font-semibold mb-4">Mis posteos</h2>
+
+        <div v-if="posts.length === 0" class="italic text-gray-500">
+            Todavía no tenés ningún post.
+        </div>
+
+        <div v-else class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div v-for="post in posts" :key="post.id" class="p-4 border rounded shadow-sm">
+                <h3 class="text-lg font-bold">{{ post.title }}</h3>
+                <p class="text-gray-700 mt-2 line-clamp-3">{{ post.content }}</p>
+                <p class="text-sm text-gray-400 mt-2">{{ new Date(post.created_at).toLocaleString() }}</p>
+            </div>
+        </div>
+
+    </section>
 </template>
