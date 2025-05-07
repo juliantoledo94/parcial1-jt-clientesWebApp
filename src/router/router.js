@@ -9,8 +9,10 @@ const routes = [
     { path: '/registro',            component: () => import('../pages/Register.vue'), },
     { path: '/chat-global',         component: () => import('../pages/GlobalChat.vue'),         meta: { requiresAuth: true, }, },
     { path: '/mi-perfil',           component: () => import('../pages/MyProfile.vue'),          meta: { requiresAuth: true, }, },
+    { path: '/mi-perfil/new-post',  component: () => import('../pages/NewPost.vue'),            meta: { requiresAuth: true, }, },
     { path: '/mi-perfil/editar',    component: () => import('../pages/MyProfileEdit.vue'),      meta: { requiresAuth: true, }, },
     { path: '/usuario/:id',         component: () => import('../pages/UserProfile.vue'),        meta: { requiresAuth: true, }, },
+    
 ];
 
 // Creamos el router con createRouter.
