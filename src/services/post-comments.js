@@ -54,3 +54,19 @@ export function subscribeToPostComments(postId, callback){
         payload => callback(payload.new)
     )
 }
+
+export async function getPostByIdWithUser(postId) {
+    const { data, error } = await supabase
+      .from('posts')
+      .select('*, user:user_profiles(display_name, email, id)')
+      .eq('id', postId)
+      .single();
+  
+    if (error) {
+      console.error('[posts.js getPostByIdWithUser] Error al traer el post:', error);
+      throw error;
+    }
+  
+    return data;
+  }
+  

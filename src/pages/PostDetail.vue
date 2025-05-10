@@ -1,9 +1,10 @@
 <script>
 import MainH1 from '../components/MainH1.vue';
-import { loadCommentsForPost, saveComment, subscribeToPostComments } from '../services/post-comments';
+import { getPostByIdWithUser, loadCommentsForPost, saveComment, subscribeToPostComments } from '../services/post-comments';
 import { getPostsByUserId } from '../services/posts';
 import { subscribeToUserState } from '../services/auth';
 import supabase from '../services/supabase';
+
 let unsubAuth = () => { };
 
 export default {
@@ -25,20 +26,14 @@ export default {
 
         unsubAuth = subscribeToUserState(user => this.user = user);
 
-        // Cargar el post si no lo tenés cargado aún (acá podés usar un servicio si hace falta)
-        // Por ahora lo dejamos manual
-        const { data: postData, error } = await supabase
-            .from('posts')
-            .select('*, user:user_profiles(display_name, email, id)')
-            .eq('id', postId)
-            .single();
+       
+        const postData = await getPostByIdWithUser(postId);
 
         this.post = postData;
 
-        // Cargar comentarios
+        
         this.comments = await loadCommentsForPost(postId);
 
-        // Escuchar en tiempo real
         subscribeToPostComments(postId, newComment => {
             this.comments.push(newComment);
         });
@@ -57,7 +52,6 @@ export default {
 
             await saveComment(commentData);
 
-            // Mostramos el comentario instantáneamente sin esperar realtime
             this.comments.push(commentData);
             this.newComment = '';
         }
