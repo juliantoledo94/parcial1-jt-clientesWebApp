@@ -25,16 +25,35 @@ export async function createNewPost(postData) {
  */
 export async function getPostsByUserId(userId) {
   const { data, error } = await supabase
-      .from('posts')
-      .select('*') // o especificá columnas si querés optimizar
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false }); // opcional, para que salgan los más recientes primero
+    .from('posts')
+    .select('*') // o especificá columnas si querés optimizar
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false }); // opcional, para que salgan los más recientes primero
 
   if (error) {
-      console.error('[posts.js getPostsByUserId] Error al traer los posts del usuario: ', error);
-      throw error;
+    console.error('[posts.js getPostsByUserId] Error al traer los posts del usuario: ', error);
+    throw error;
   }
 
   return data;
 }
 
+
+/**
+ * Trae todas las publicaciones, ordendas de más nueva a más vieja.
+ * 
+ * @returns {Promise<Array>}
+ */
+export async function getAllPosts() {
+  const { data, error } = await supabase
+  .from("posts")
+  .select("*, user: user_profiles(display_name, email, id)")
+  .order("created_at",{ascending:false});
+
+  if(error){
+    console.error("[posts.js getAllPosts] Error al traer todos los posts", error);
+    throw error;
+  }
+
+  return data;
+}
