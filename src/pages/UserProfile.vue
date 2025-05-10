@@ -28,12 +28,13 @@ export default {
             // $router y $route.
             // Contienen la referencia al objeto del Router y al objeto de la ruta en la que estamos, respectivamente.
             const userId = this.$route.params.id;
-        this.user = await getUserProfileById(userId);
-        this.posts = await getPostsByUserId(userId);
-        this.loading = false;
+            this.user = await getUserProfileById(userId);
+            this.posts = await getPostsByUserId(userId);
+            this.loading = false;
             this.loading = false;
         } catch (error) {
-            // TODO...
+            console.error("Error al cargar perfil del usuario: ", error);
+            this.loading = false;
         }
     },
 }
