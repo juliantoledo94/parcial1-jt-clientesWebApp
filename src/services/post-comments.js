@@ -2,9 +2,10 @@ import supabase from "./supabase";
 
 
 /**
+ * Trae todos los comentarios asociados a un post específico, incluyendo los datos del usuario que comentó.
  * 
- * @param {id: string} postId 
- * @returns 
+ * @param {string} postId - ID del post del cual se quieren obtener los comentarios.
+ * @returns {Promise<Array>} - Array de objetos de comentarios con datos de usuario.
  */
 export async function loadCommentsForPost(postId){
     const {data, error} = await supabase
@@ -22,9 +23,11 @@ export async function loadCommentsForPost(postId){
 }
 
 /**
- * Escucha en tiempo real los comentarios nuevos de un post.
+ * Guarda un nuevo comentario en la base de datos.
  * 
- * @param {*} param0 
+ * @param {{ post_id: string, user_id: string, email: string, content: string, created_at?: string }} commentData - 
+ * Objeto con los datos del comentario a guardar.
+ * @returns {Promise<void>}
  */
 export async function saveComment({post_id, user_id, email, content}){
     const {error} = await supabase
@@ -37,7 +40,14 @@ export async function saveComment({post_id, user_id, email, content}){
     }
 }
 
-
+/**
+ * Escucha en tiempo real nuevos comentarios agregados a un post específico.
+ * Llama al callback cada vez que se inserta un nuevo comentario en la base de datos para ese post.
+ * 
+ * @param {string} postId - ID del post que se quiere observar.
+ * @param {(comment: object) => void} callback - Función a ejecutar cuando llega un nuevo comentario.
+ * @returns {void}
+ */
 export function subscribeToPostComments(postId, callback){
     const channel = supabase.channel(`comments-${postId}`,{
         config: { broadcast: { self: true } },
@@ -55,6 +65,13 @@ export function subscribeToPostComments(postId, callback){
     )
 }
 
+/**
+ * Trae un post específico por su ID, incluyendo los datos del usuario que lo creó.
+ * 
+ * @param {string} postId - ID del post a buscar.
+ * @returns {Promise<object>} - Objeto con los datos del post y del usuario relacionado.
+ * @throws {Error} - Lanza un error si ocurre algún problema durante la consulta.
+ */
 export async function getPostByIdWithUser(postId) {
     const { data, error } = await supabase
       .from('posts')

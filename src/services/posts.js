@@ -1,9 +1,10 @@
 import supabase from "./supabase";
 
 /**
- * Funcion que nos permite crear nuevos posteos en la base de datos y los asocia al perfil que los creo
+ * Crea un nuevo post en la base de datos y lo asocia al usuario que lo creó.
  * 
- * @param {{user_id: string, title: string, content: string, created_at: string}} postData 
+ * @param {{user_id: string, title: string, content: string, created_at: string}} postData - Datos del post a insertar.
+ * @throws {Error} - Lanza un error si ocurre algún problema durante la inserción.
  */
 export async function createNewPost(postData) {
   const { error } = await supabase
@@ -18,10 +19,11 @@ export async function createNewPost(postData) {
 
 
 /**
- * Funcion que nos permite traer todos los posteos de un mismo perfil.
+ * Obtiene todos los posts creados por un usuario específico.
  * 
- * @param {string} userId 
- * @returns {Promise<Array>}
+ * @param {string} userId - ID del usuario.
+ * @returns {Promise<object[]>} - Lista de posts del usuario.
+ * @throws {Error} - Lanza un error si falla la consulta.
  */
 export async function getPostsByUserId(userId) {
   const { data, error } = await supabase
@@ -40,9 +42,10 @@ export async function getPostsByUserId(userId) {
 
 
 /**
- * Trae todas las publicaciones, ordendas de más nueva a más vieja.
+ * Trae todas las publicaciones de todos los usuarios, ordenadas de la más reciente a la más antigua.
  * 
- * @returns {Promise<Array>}
+ * @returns {Promise<object[]>} - Lista de todos los posts con información del usuario que los creó.
+ * @throws {Error} - Lanza un error si falla la consulta.
  */
 export async function getAllPosts() {
   const { data, error } = await supabase
