@@ -22,7 +22,7 @@ export default {
 </script>
 
 <template>
-    <MainH1>¡Les damos la bienvenida a DV Social!</MainH1>
+    <MainH1>¡Les damos la bienvenida a Comunidad G!</MainH1>
 
     <section class="mt-12">
         <h2 class="text-xl font-semibold mb-4">Últimas publicaciones</h2>
