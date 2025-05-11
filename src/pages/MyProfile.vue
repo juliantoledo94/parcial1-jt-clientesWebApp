@@ -54,8 +54,8 @@ export default {
         <dd class="mb-4">{{ user.email }}</dd>
         <dt class="mb-0.5 font-bold">Nombre de Usuario</dt>
         <dd class="mb-4">{{ user.display_name || 'Sin especificar' }}</dd>
-        <dt class="mb-0.5 font-bold">Carrera</dt>
-        <dd class="mb-4">{{ user.career || 'Sin especificar' }}</dd>
+        <!-- <dt class="mb-0.5 font-bold">Carrera</dt>
+        <dd class="mb-4">{{ user.career || 'Sin especificar' }}</dd> -->
     </dl>
 
     <section class="mt-12">
