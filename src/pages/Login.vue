@@ -21,6 +21,7 @@ export default {
                 const user = await login(this.user.email, this.user.password);
                 this.loading = false;
 
+                this.$router.push('/');
                 // Emitimos un evento "login" con los datos del usuario que se autenticó.
                 // De esta forma, cualquier elemento contenedor (como App) va a poder escuchar ese evento y recibir los 
                 // datos.
