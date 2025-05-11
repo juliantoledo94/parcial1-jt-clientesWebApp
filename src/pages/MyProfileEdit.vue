@@ -110,7 +110,7 @@ export default {
                 v-model="profile.display_name"
             >
         </div>
-        <div class="mb-4">
+        <!-- <div class="mb-4">
             <label for="career" class="block mb-2">Carrera</label>
             <input
                 type="text"
@@ -118,7 +118,7 @@ export default {
                 class="w-full p-2 border border-gray-400 rounded"
                 v-model="profile.career"
             >
-        </div>
+        </div> -->
         <MainButton type="submit">
             <!-- {{ !updating ? 'Actualizar' : 'Cargando...' }} -->
             <template v-if="!updating">Actualizar</template>

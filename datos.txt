@@ -1,0 +1,9 @@
+Carrera: Diseño y Desarrollo Web
+Materia: Clientes Web y Mobile
+Cuatrimestre: 1º
+Año: 2025
+Turno: Noche
+Comisión: DW202300
+Apellido y Nombre: Toledo Julian David
+Docente:  Gallino Santiago
+Carácter de entrega: 1er parcial
