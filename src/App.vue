@@ -66,16 +66,16 @@ export default {
         Las clases para los estilos de tamaño de tipografía son un poco arbitrarios. No siguen la escala previamente
         mencionada.
         -->
-        <RouterLink class="text-lg" to="/">DV Social</RouterLink>
+        <RouterLink class="text-lg " to="/">Comunidad G</RouterLink>
         <ul class="flex gap-4">
             <li>
                 <!-- <router-link to="/">Home</router-link> -->
                 <RouterLink to="/">Home</RouterLink>
             </li>
             <template v-if="user.id !== null">
-                <li>
+                <!-- <li>
                     <RouterLink to="/chat-global">Chat global</RouterLink>
-                </li>
+                </li> -->
                 <li>
                     <RouterLink to="/mi-perfil">Mi perfil</RouterLink>
                 </li>

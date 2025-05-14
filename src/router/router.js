@@ -38,13 +38,10 @@ let user = {
 }
 subscribeToUserState(newUserData => user = newUserData);
 
-// Configuramos el "navigation guard", que se ejecuta en cada acceso a una ruta.
-// Pasamos un callback que va a recibir dos parámetros:
-// 1. Un objeto NormalizedRoute de la ruta a la que se está tratando de acceder.
-// 2. Un objeto NormalizedRoute de la ruta de la que venimos, si aplica.
+
 router.beforeEach((to, from) => {
     if(to.meta.requiresAuth && user.id === null) {
-        // Redireccionamos al login, retornando el path de su ruta.
+        
         return '/ingresar';
     }
 });
