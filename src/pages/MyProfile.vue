@@ -42,26 +42,43 @@ export default {
 
 <template>
 
-    
 
 
     <div class="flex gap-4 items-end">
+
         <MainH1>Mi perfil</MainH1>
         <RouterLink to="/mi-perfil/editar" class="mb-4 text-blue-700">Editar</RouterLink>
         <RouterLink to="/mi-perfil/new-post" class="mb-4 text-blue-700">Crear Post</RouterLink>
     </div>
 
-    <div class="ms-4 my-8 italic text-white drop-shadow-[1px_1px_1px_rgba(0,0,0,0.7)]">{{ user.bio || 'Acá va mi biografía...' }}</div>
+    <div
+        class="p-2 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg ">
 
-    <dl>
-        <dt class="mb-0.5 font-bold">Email</dt>
-        <dd class="mb-4">{{ user.email }}</dd>
-        <dt class="mb-0.5 font-bold">Nombre de Usuario</dt>
-        <dd class="mb-4">{{ user.display_name || 'Sin especificar' }}</dd>
-        <!-- <dt class="mb-0.5 font-bold">Carrera</dt>
-        <dd class="mb-4">{{ user.career || 'Sin especificar' }}</dd> -->
-    </dl>
 
+
+
+        <div class=" italic text-white drop-shadow-[1px_1px_1px_rgba(0,0,0,0.7)] flex items-center">
+            <div class=" w-24 h-24 rounded-full border-2 border-white bg-[#1f3d2e] flex items-center justify-center  text-[#9ee37d] text-3xl font-bold me-5 mb-3"
+                style="font-family: 'Press Start 2P', cursive;">
+
+
+                {{ user?.email?.charAt(0).toUpperCase() }}
+
+            </div>
+            {{ user.bio || 'Acá va mi biografía...' }}
+
+        </div>
+
+        <dl>
+            <dt class="mb-0.5 font-bold">Email</dt>
+            <dd class="mb-4">{{ user.email }}</dd>
+            <dt class="mb-0.5 font-bold">Nombre de Usuario</dt>
+            <dd class="mb-4">{{ user.display_name || 'Sin especificar' }}</dd>
+            <!-- <dt class="mb-0.5 font-bold">Carrera</dt>
+    <dd class="mb-4">{{ user.career || 'Sin especificar' }}</dd> -->
+        </dl>
+
+    </div>
     <section class="mt-12">
         <h2 class="text-xl font-semibold mb-4">Mis posteos</h2>
 
@@ -70,7 +87,8 @@ export default {
         </div>
 
         <div v-else class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <div v-for="post in posts" :key="post.id" class="p-6 rounded-xl border border-gray-300 bg-white/80 backdrop-blur-sm shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_25px_rgba(0,0,0,0.25)] transition duration-300 hover:-translate-y-1 hover:scale-100">
+            <div v-for="post in posts" :key="post.id"
+                class="p-6 rounded-xl border border-gray-300 bg-white/80 backdrop-blur-sm shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_25px_rgba(0,0,0,0.25)] transition duration-300 hover:-translate-y-1 hover:scale-100">
                 <h3 class="text-lg font-bold">
                     <RouterLink :to="`/post/${post.id}`" class="text-lg font-bold mb-1 hover:underline block">
                         {{ post.title }}
