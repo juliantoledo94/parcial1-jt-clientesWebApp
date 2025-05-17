@@ -100,7 +100,7 @@ export default {
       <input
         type="text"
         id="title"
-        class="w-full p-2 border border-gray-400 rounded"
+        class="w-full p-2 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg"
         v-model="post.title"
         required
       >
@@ -110,7 +110,7 @@ export default {
       <label for="content" class="block mb-2">Contenido</label>
       <textarea
         id="content"
-        class="w-full p-2 border border-gray-400 rounded"
+        class="w-full p-2 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg"
         v-model="post.content"
         required
       ></textarea>
