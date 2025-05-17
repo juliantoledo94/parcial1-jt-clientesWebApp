@@ -32,7 +32,7 @@ export default {
         </div>
 
         <div v-else class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <div v-for="post in posts" :key="post.id" class="p-4 border rounded shadow-sm">
+            <div v-for="post in posts" :key="post.id" class="p-6 rounded-xl border border-gray-300 bg-white/80 backdrop-blur-sm shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_25px_rgba(0,0,0,0.25)] transition duration-300 hover:-translate-y-1 hover:scale-100">
 
                 <h3 class="text-lg font-bold mb-1">
                     <RouterLink :to="`/post/${post.id}`" class="text-lg font-bold mb-1 hover:underline block">

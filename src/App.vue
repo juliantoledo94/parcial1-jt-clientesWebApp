@@ -66,8 +66,8 @@ export default {
             </template>
         </ul>
     </nav>
-    <div class="container mx-auto p-4 ">
-       <div>
+    <div class="min-h-screen bg-no-repeat bg-cover bg-bottom bg-fixed bg-[url('src/assets/woods.png')]">
+       <div class="container mx-auto p-4 ">
 
            <RouterView />
        </div> 
