@@ -25,7 +25,7 @@ export default {
     <MainH1>¡Les damos la bienvenida a Comunidad G!</MainH1>
 
     <section class="mt-12">
-        <h2 class="text-xl font-semibold mb-4">Últimas publicaciones</h2>
+        <h2 class="text-xl font-semibold mb-4 text-white drop-shadow-[1px_1px_1px_rgba(0,0,0,0.7)]" >Últimas publicaciones</h2>
 
         <div v-if="posts.length === 0" class="italic text-gray-500">
             No hay publicaciones todavía.

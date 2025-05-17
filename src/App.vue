@@ -32,36 +32,36 @@ export default {
 
 <template>
    
-    <nav class="flex items-center gap-8 p-4 bg-slate-300">
+    <nav class="flex items-center gap-8 p-4 text-white  shadow-md bg-[#1b4332]">
      
-        <RouterLink class="text-lg " to="/">Comunidad G</RouterLink>
+        <RouterLink class="text-lg " to="/" style="font-family: 'Press Start 2P', cursive;">Comunidad G</RouterLink>
         <ul class="flex gap-4">
             <li>
                 <!-- <router-link to="/">Home</router-link> -->
-                <RouterLink to="/">Home</RouterLink>
+                <RouterLink to="/" class="text-white hover:text-[#bb8a62]">Home</RouterLink>
             </li>
             <template v-if="user.id !== null">
                 <!-- <li>
                     <RouterLink to="/chat-global">Chat global</RouterLink>
                 </li> -->
                 <li>
-                    <RouterLink to="/mi-perfil">Mi perfil</RouterLink>
+                    <RouterLink to="/mi-perfil" class="text-white hover:text-[#bb8a62]">Mi perfil</RouterLink>
                 </li>
                 <li>
                     <form 
                         action="#"
                         @submit.prevent="handleLogout"
                     >
-                        <button type="submit">{{ user.email }} (cerrar sesión)</button>
+                        <button type="submit" class="text-white hover:text-[#bb8a62]">{{ user.email }} (cerrar sesión)</button>
                     </form>
                 </li>
             </template>
             <template v-else>
                 <li>
-                    <RouterLink to="/ingresar">Iniciar sesión</RouterLink>
+                    <RouterLink to="/ingresar" class="text-white hover:text-[#bb8a62]">Iniciar sesión</RouterLink>
                 </li>
                 <li >
-                    <RouterLink to="/registro">Registrarse</RouterLink>
+                    <RouterLink to="/registro" class="text-white hover:text-[#bb8a62]">Registrarse</RouterLink>
                 </li>
             </template>
         </ul>
