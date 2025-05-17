@@ -41,6 +41,10 @@ export default {
 </script>
 
 <template>
+
+    
+
+
     <div class="flex gap-4 items-end">
         <MainH1>Mi perfil</MainH1>
         <RouterLink to="/mi-perfil/editar" class="mb-4 text-blue-700">Editar</RouterLink>
