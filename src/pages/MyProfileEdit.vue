@@ -94,19 +94,19 @@ export default {
         @submit.prevent="handleSubmit"
     >
         <div class="mb-4">
-            <label for="bio" class="block mb-2">Biografía</label>
+            <label for="bio" class="block mb-2 text-white">Biografía</label>
             <textarea
                 id="bio"
-                class="w-full p-2 border border-gray-400 rounded"
+                class="w-full p-2 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg "
                 v-model="profile.bio"
             ></textarea>
         </div>
         <div class="mb-4">
-            <label for="display_name" class="block mb-2">Nombre de usuario</label>
+            <label for="display_name" class="block mb-2 text-white">Nombre de usuario</label>
             <input
                 type="text"
                 id="display_name"
-                class="w-full p-2 border border-gray-400 rounded"
+                class="w-full p-2 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg"
                 v-model="profile.display_name"
             >
         </div>

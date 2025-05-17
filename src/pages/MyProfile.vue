@@ -47,8 +47,7 @@ export default {
     <div class="flex gap-4 items-end">
 
         <MainH1>Mi perfil</MainH1>
-        <RouterLink to="/mi-perfil/editar" class="mb-4 text-blue-700">Editar</RouterLink>
-        <RouterLink to="/mi-perfil/new-post" class="mb-4 text-blue-700">Crear Post</RouterLink>
+        
     </div>
 
     <div
@@ -74,9 +73,22 @@ export default {
             <dd class="mb-4">{{ user.email }}</dd>
             <dt class="mb-0.5 font-bold">Nombre de Usuario</dt>
             <dd class="mb-4">{{ user.display_name || 'Sin especificar' }}</dd>
+            
+            
             <!-- <dt class="mb-0.5 font-bold">Carrera</dt>
     <dd class="mb-4">{{ user.career || 'Sin especificar' }}</dd> -->
         </dl>
+        <div class="row flex flex-wrap gap-4">
+
+            <div class="border border-white rounded-xl bg-[#1f3d2e] text-[#9ee37d] hover:text-white p-2">
+
+                <RouterLink to="/mi-perfil/editar" class="mb-4 ">Editar Perfil</RouterLink>
+            </div>
+            <div class="border border-white rounded-xl bg-[#1f3d2e]  text-[#9ee37d] hover:text-white p-2">
+
+                <RouterLink to="/mi-perfil/new-post" class="mb-4 ">Crear Post</RouterLink>
+            </div>
+        </div>
 
     </div>
     <section class="mt-12">
