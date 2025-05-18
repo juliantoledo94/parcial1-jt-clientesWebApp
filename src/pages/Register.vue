@@ -40,7 +40,7 @@ export default {
             <input
                 type="email"
                 id="email"
-                class="w-full p-2 border border-gray-400 rounded"
+                class="w-full p-2 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg"
                 v-model="user.email"
             >
         </div>
@@ -49,7 +49,7 @@ export default {
             <input
                 type="password"
                 id="password"
-                class="w-full p-2 border border-gray-400 rounded"
+                class="w-full p-2 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg"
                 v-model="user.password"
             >
         </div>
