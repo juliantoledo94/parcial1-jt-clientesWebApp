@@ -26,12 +26,12 @@ export default {
 
         unsubAuth = subscribeToUserState(user => this.user = user);
 
-       
+
         const postData = await getPostByIdWithUser(postId);
 
         this.post = postData;
 
-        
+
         this.comments = await loadCommentsForPost(postId);
 
         subscribeToPostComments(postId, newComment => {
@@ -65,29 +65,38 @@ export default {
 
 <template>
     <MainH1>{{ post?.title }}</MainH1>
-    <p class="mb-6">Creador <span class="text-blue-600">{{ post?.user?.display_name || post?.user?.email ||
-        'Desconocido' }}</span></p>
-    <p class="mb-6">{{ post?.content }}</p>
+    <section class="p-6 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg ">
+        <p class="mb-6 ">Creador <span class="text-blue-700">
+                <RouterLink :to="`/usuario/${user?.id}`">
+                    {{ post?.user?.display_name || post?.user?.email ||
+                        'Desconocido' }}
+
+                </RouterLink>
+
+            </span></p>
+        <p class="mb-6">{{ post?.content }}</p>
+    </section>
+
 
     <section class="mt-8">
         <h2 class="text-xl font-semibold mb-4">Comentarios</h2>
 
-        <div v-if="comments.length === 0" class="italic text-gray-500">Sin comentarios aún.</div>
+        <div v-if="comments.length === 0" class="italic text-grey">Sin comentarios aún.</div>
 
         <ul class="space-y-3 mb-6">
-            <li v-for="comment in comments" :key="comment.id" class="border p-3 rounded">
+            <li v-for="comment in comments" :key="comment.id" class=" p-3 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg ">
                 <p class="font-bold text-sm text-blue-700">
                     {{ comment.email || 'Usuario desconocido' }}
                 </p>
                 <p class="mt-1">{{ comment.content }}</p>
-                <p class="text-xs text-gray-400 mt-1">{{ new Date(comment.created_at).toLocaleString() }}</p>
+                <p class="text-xs text-white mt-1">{{ new Date(comment.created_at).toLocaleString() }}</p>
             </li>
         </ul>
 
 
-        <form @submit.prevent="submitComment" class="space-y-2">
-            <label for="newComment">Agregar comentario:</label>
-            <textarea id="newComment" v-model="newComment" class="w-full p-2 border rounded" rows="3"></textarea>
+        <form @submit.prevent="submitComment" class="space-y-2 ">
+            <label for="newComment " class="mb-3" style="font-family: 'Press Start 2P', cursive;">Agregar comentario:</label>
+            <textarea id="newComment" v-model="newComment" class="w-full p-2  rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg" rows="3"></textarea>
             <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500">Comentar</button>
         </form>
     </section>
