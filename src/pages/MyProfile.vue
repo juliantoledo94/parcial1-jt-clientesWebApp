@@ -47,11 +47,10 @@ export default {
     <div class="flex gap-4 items-end">
 
         <MainH1>Mi perfil</MainH1>
-        
+
     </div>
 
-    <div
-        class="p-2 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg ">
+    <div class="p-2 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg ">
 
 
 
@@ -73,11 +72,11 @@ export default {
             <dd class="mb-4">{{ user.email }}</dd>
             <dt class="mb-0.5 font-bold">Nombre de Usuario</dt>
             <dd class="mb-4">{{ user.display_name || 'Sin especificar' }}</dd>
-            
-            
-            <!-- <dt class="mb-0.5 font-bold">Carrera</dt>
-    <dd class="mb-4">{{ user.career || 'Sin especificar' }}</dd> -->
+
+
+
         </dl>
+
         <div class="row flex flex-wrap gap-4">
 
             <div class="border border-white rounded-xl bg-[#1f3d2e] text-[#9ee37d] hover:text-white p-2">
