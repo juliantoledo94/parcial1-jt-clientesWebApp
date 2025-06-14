@@ -30,6 +30,14 @@ let observers = [];
 // Pedimos cargar la data actual del usuario.
 loadInitialUserState();
 
+//Verificamos is tenemos un usuario en localstorage que figure como auntenticado si existe los usamos para marcar 
+// al usuario como autenticado
+
+if(localStorage.getItem("user")){
+    user = JSON.parse(localStorage.getItem("user"));
+}
+
+
 /**
  * Carga la información del usuario autenticado, si es que existe alguno.
  */
@@ -201,5 +209,13 @@ function updateUser(data) {
         ...user,
         ...data,
     }
+
+    if(user.id !== null){
+
+        localStorage.setItem("user",JSON.stringify(user))
+    }else{
+        localStorage.removeItem("user");
+    }
+
     notifyAll();
 }

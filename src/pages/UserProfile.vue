@@ -3,6 +3,7 @@ import MainH1 from '../components/MainH1.vue';
 import MainLoader from '../components/MainLoader.vue';
 import { getUserProfileById } from '../services/user-profiles';
 import { getPostsByUserId } from '../services/posts';
+import { RouterLink } from 'vue-router';
 
 
 export default {
@@ -63,6 +64,12 @@ export default {
                 <dd class="mb-4">{{ user.display_name || 'Sin especificar' }}</dd>
                 
             </dl>
+
+            <hr class="mb-4">
+            <RouterLink
+                :to="`/usuario/${user.id}/chat`"
+                class="text-blue-700"
+            >Iniciar conversación privada con {{ user.email }}</RouterLink>
 
         </div>
 
