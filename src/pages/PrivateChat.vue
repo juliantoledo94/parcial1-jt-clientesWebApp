@@ -1,4 +1,5 @@
 <script>
+import { nextTick } from 'vue';
 import MainButton from '../components/MainButton.vue';
 import MainH1 from '../components/MainH1.vue';
 import MainLoader from '../components/MainLoader.vue';
@@ -58,15 +59,20 @@ export default {
 
             this.userChat = await getUserProfileById(this.$route.params.id);
             this.loadingUser = false;
-            suscribeToPrivateNewMessages(this.userAuth.id, this.userChat.id, newMessage => {
+            suscribeToPrivateNewMessages(this.userAuth.id, this.userChat.id, async newMessage => {
 
                 this.messages.push(newMessage);
+                await nextTick();
+                this.$refs.chatContainer.scrollTop = this.$refs.chatContainer.scrollHeight;
 
             });
             this.messages = await getLastPrivateChatMessages(this.userAuth.id, this.userChat.id);
 
             this.loadingMessage = false;
-           
+
+            await nextTick();
+            this.$refs.chatContainer.scrollTop = this.$refs.chatContainer.scrollHeight;
+
         } catch (error) {
 
         }
@@ -87,9 +93,14 @@ export default {
         <section ref="chatContainer" class="overflow-y-auto  h-100 p-4 mb-4 border border-gray-400 rounded">
             <h2 class="sr-only">Lista de mensajes</h2>
 
-            <ul v-if="!loadingMessage" class="flex flex-col gap-4">
+            <ul v-if="!loadingMessage" class="flex items-start flex-col gap-4">
 
-                <li v-for="message in messages" :key="message.id" class="flex flex-col gap-0.5">
+                <li v-for="message in messages" :key="message.id" class="flex flex-col  gap-0.5 max-w-8/12 p-4 rounded"
+                    :class='{
+                        "bg-gray-100": message.sender_id !== userAuth.id,
+                        "bg-green-200 self-end": message.sender_id === userAuth.id,
+
+                    }'>
 
                     <div>{{ message.body }}</div>
                     <div class="text-sm text-gray-600">{{ message.created_at }}</div>

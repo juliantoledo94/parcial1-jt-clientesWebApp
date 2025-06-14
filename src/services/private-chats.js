@@ -1,5 +1,9 @@
 import supabase from "./supabase";
 
+// TODO:Optimizacion de performance para reducir la cantidad de peticiones(uso de caché).
+
+
+
 /**
  * 
  * @param {string} sender_id 
@@ -119,6 +123,7 @@ export async function suscribeToPrivateNewMessages(sender_id, receiver_id, callb
         },
         payload => {
             callback(payload.new);
+           
         }
     );
     //1:11 clase 13/05
