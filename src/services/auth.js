@@ -138,7 +138,11 @@ export async function logout() {
     updateUser({
         id: null, 
         email: null,
+        bio: null,
+        display_name: null,
+        career: null,
     });
+
 }
 
 /**
@@ -154,6 +158,17 @@ export async function updateAuthUserProfile(data) {
         console.error('[auth.js updateAuthUserProfile] Error al actualizar el perfil del usuario autenticado: ', error);
         throw error;
     }
+}
+
+export async function updateAuthUserPassword(password) {
+
+    try {
+        await supabase.auth.updateUser({password});
+    } catch (error) {
+         console.error('[auth.js updateAuthUserPassword] Error al actualizar el password del usuario autenticado: ', error);
+        throw error;
+    }
+    
 }
 
 /*----------------------------------------------------------------------
