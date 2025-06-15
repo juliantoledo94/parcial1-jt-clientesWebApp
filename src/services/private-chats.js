@@ -4,6 +4,13 @@ import supabase from "./supabase";
 
 
 
+let privateChatIdsCache = {};
+
+//levantamos del cache los ids que tengamos almacenados
+if(localStorage.getItem("privateChatIds")){
+    privateChatIdsCache = JSON.parse(localStorage.getItem("privateChatIds"));
+}
+
 /**
  * 
  * @param {string} sender_id 
@@ -11,11 +18,19 @@ import supabase from "./supabase";
  * @returns {Promise<number>}
  */
 async function getPrivateChat(sender_id, receiver_id) {
+
+    const cacheKey = [sender_id, receiver_id].sort().join("_");
+
+    if(privateChatIdsCache[cacheKey]) return privateChatIdsCache[cacheKey]
+
     let chat_id = await fetchPrivateChat(sender_id, receiver_id);
 
     if (!chat_id) {
         return await createPrivateChat(sender_id, receiver_id);
     }
+
+    privateChatIdsCache[cacheKey] = chat_id;
+    localStorage.setItem("privateChatIds",JSON.stringify(privateChatIdsCache));
 
     return chat_id;
 }
