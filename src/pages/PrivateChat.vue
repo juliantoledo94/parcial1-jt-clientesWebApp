@@ -80,7 +80,7 @@ export default {
 
 }
 
-
+//min 1:18 clase 20/05
 </script>
 
 
