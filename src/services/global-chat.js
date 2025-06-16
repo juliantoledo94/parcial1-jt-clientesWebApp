@@ -44,23 +44,21 @@ export async function loadLastGlobalChatMessages() {
 /**
  * Graba un nuevo mensaje de chat.
  * 
- * @param {{email: string, body: string}} data 
+ * @param {{email: string, body: string, user_id: string}} data 
  * @returns {Promise}
  */
 export async function saveGlobalChatMessage(data) {
     const { error } = await supabase
-        // Para hacer consultas contra la base de datos, vamos a empezar típicamente con una llamada a "from", que
-        // aclare con qué tabla quiero interactuar.
+        
         .from('global_chat')
-        // Luego, le vamos a indicar la acción que queremos realizar. En este caso, queremos insertar un registro,
-        // así que usamos insert().
+       
         .insert({
             user_id: data.user_id,
             email: data.email,
             body: data.body,
         });
 
-    // Preguntamos si hay algún error.
+  
     if(error) {
         console.error('[global-chat.js saveGlobalChatMessage] Error al insertar el registro: ', error);
         throw error;

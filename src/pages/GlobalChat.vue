@@ -1,13 +1,82 @@
-<script>
-import { nextTick } from 'vue';
+<script setup>
+import { nextTick, onMounted, ref, useTemplateRef } from 'vue';
 import MainH1 from '../components/MainH1.vue';
 import { loadLastGlobalChatMessages, saveGlobalChatMessage, subscribeToGlobalChatNewMessages } from '../services/global-chat';
-import { subscribeToUserState } from '../services/auth';
+
 import MainLoader from '../components/MainLoader.vue';
+import useAuthUserState from '../composables/useAuthUserState';
+import useScrollToBottomToBottom from '../composables/useScrollToBottom';
 
-let unsubAuth = () => {};
+const { user } = useAuthUserState();
+const { messages, loadingMessages } = useGlobalChatMessages();
+const { newMessage, sendMessage } = useGlobalChatForm(user);
+const { moveScrollToBottom } = useScrollToBottomToBottom("chatContainer")
 
-export default {
+/* async function moveScroll() {
+    await nextTick();
+    chatContainer.value.scrollTop = chatContainer.value.scrollHeight;
+} */
+
+function useGlobalChatMessages() {
+
+    const messages = ref([]);
+    const loadingMessages = ref(true);
+    /* const chatContainer = useTemplateRef("chatContainer") */
+
+    onMounted(async () => {
+        try {
+            messages.value = await loadLastGlobalChatMessages();
+            loadingMessages = false;
+
+            subscribeToGlobalChatNewMessages(async newMessage => {
+                messages.value.push(newMessage);
+                moveScrollToBottom()
+            })
+
+            moveScrollToBottom()
+        } catch (error) {
+            console.error("Error: ", error)
+            throw error;
+        }
+    });
+
+    return {
+        messages,
+        loadingMessages,
+    }
+}
+
+
+
+function useGlobalChatForm(user) {
+    const newMessage = ref({
+        body: "",
+    });
+
+    async function sendMessage() {
+        try {
+
+            await saveGlobalChatMessage({
+                user_id: user.value.id,
+                email: user.value.email,
+                body: newMessage.value.body,
+            });
+
+            newMessage.value.body = "";
+        } catch (error) {
+            console.error("Error: ", error);
+            throw error;
+        }
+    }
+
+    return {
+        newMessage,
+        sendMessage,
+    }
+
+}
+
+/* export default {
     name: 'GlobalChat',
     components: { MainH1, MainLoader },
    
@@ -29,7 +98,7 @@ export default {
             }
         }
     },
-    // La propiedad "methods" permite definir las funciones que queremos que el componente tenga.
+   
     methods: {
         async sendMessage() {
             await saveGlobalChatMessage({
@@ -49,9 +118,7 @@ export default {
             await nextTick();
             this.$refs.chatContainer.scrollTop = this.$refs.chatContainer.scrollHeight;
         });
-        // subscribeToGlobalChatNewMessages(function (newMessageReceived) { this.messages.push(newMessageReceived) });
-
-        // Traemos los mensajes iniciales.
+        
         try {
             this.messages = await loadLastGlobalChatMessages();
             this.loadingMessages = false;
@@ -60,42 +127,29 @@ export default {
             await nextTick();
             this.$refs.chatContainer.scrollTop = this.$refs.chatContainer.scrollHeight;
         } catch (error) {
-            // TODO: Manejar el error...
+           
         }
     },
     unmounted() {
         unsubAuth();
     }
-}
+} */
 </script>
 
 <template>
     <MainH1>Chat global</MainH1>
-    
+
     <div class="flex gap-4">
-        <section 
-            ref="chatContainer"
-            class="overflow-y-auto w-9/12 h-100 p-4 border border-gray-400 rounded"
-        >
+        <section ref="chatContainer" class="overflow-y-auto w-9/12 h-100 p-4 border border-gray-400 rounded">
             <h2 class="sr-only">Lista de mensajes</h2>
 
-            <ul 
-                v-if="!loadingMessages"
-                class="flex flex-col gap-4"
-            >
-                
-                <li
-                    v-for="message in messages"
-                    :key="message.id"
-                    class="flex flex-col gap-0.5"
-                >
+            <ul v-if="!loadingMessages" class="flex flex-col gap-4">
+
+                <li v-for="message in messages" :key="message.id" class="flex flex-col gap-0.5">
                     <div>
-                        <RouterLink 
-                            :to="`/usuario/${message.user_id}`"
-                            class="font-bold text-blue-700 underline"
-                        >
+                        <RouterLink :to="`/usuario/${message.user_id}`" class="font-bold text-blue-700 underline">
                             {{ message.email }}
-                        </RouterLink> 
+                        </RouterLink>
                         dijo:
                     </div>
                     <div>{{ message.body }}</div>
@@ -118,10 +172,7 @@ export default {
             Los modificadores alteran o agregan alguna funcionalidad propia del evento.
             El más común es probablemente ".prevent" (que hace un preventDefault()).
             -->
-            <form
-                action="#"
-                @submit.prevent="() => sendMessage()"
-            >
+            <form action="#" @submit.prevent="() => sendMessage()">
                 <div class="mb-4">
                     <div class="block mb-2">Email</div>
                     <div class="font-bold">{{ user.email }}</div>
@@ -136,13 +187,11 @@ export default {
                     Dicho de otra forma, si cambio el valor del state, se actualiza el campo, y si cambio el valor del
                     campo, se actualiza el state.
                     -->
-                    <textarea
-                        id="body"
-                        class="w-full p-2 border border-gray-400 rounded"
-                        v-model="newMessage.body"
-                    ></textarea>
+                    <textarea id="body" class="w-full p-2 border border-gray-400 rounded"
+                        v-model="newMessage.body"></textarea>
                 </div>
-                <button type="submit" class="transition px-4 py-2 rounded bg-blue-600 hover:bg-blue-500 focus:bg-blue-500 active:bg-blue-700 text-white">Enviar</button>
+                <button type="submit"
+                    class="transition px-4 py-2 rounded bg-blue-600 hover:bg-blue-500 focus:bg-blue-500 active:bg-blue-700 text-white">Enviar</button>
             </form>
         </section>
     </div>
