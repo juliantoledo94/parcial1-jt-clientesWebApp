@@ -1,11 +1,49 @@
-<script>
+<script setup>
+import { onMounted, onUnmounted, ref } from 'vue';
 import MainH1 from '../components/MainH1.vue';
 import { subscribeToUserState } from '../services/auth';
 import { getPostsByUserId } from '../services/posts';
 
-let unsubAuth = () => { };
 
-export default {
+const { user, posts } = useAuthUserState();
+
+function useAuthUserState() {
+    let unsubAuth = () => { };
+
+    const user = ref({
+        id: null,
+        email: null,
+        display_name: null,
+        bio: null,
+        career: null,
+
+    });
+
+    const posts = ref([]);
+
+    onMounted(() => {
+        unsubAuth = subscribeToUserState(async (newUserState) => {
+            user.value = newUserState;
+
+            if (user.value.id) {
+                try {
+                    posts.value = await getPostsByUserId(user.value.id);
+                } catch (error) {
+                    console.error("Error al obtener los posts del perfil:", error);
+                }
+            }
+        });
+    });
+    onUnmounted(unsubAuth);
+
+    return {
+        user,
+        posts,
+    }
+
+}
+
+/* export default {
     name: 'MyProfile',
     components: { MainH1, },
     data() {
@@ -37,7 +75,7 @@ export default {
     unmounted() {
         unsubAuth();
     }
-}
+} */
 </script>
 
 <template>
