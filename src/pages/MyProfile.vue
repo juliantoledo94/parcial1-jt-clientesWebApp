@@ -1,13 +1,13 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue';
+
 import MainH1 from '../components/MainH1.vue';
-import { subscribeToUserState } from '../services/auth';
-import { getPostsByUserId } from '../services/posts';
+import useAuthUserState from '../composables/useAuthUserState';
+
 
 
 const { user, posts } = useAuthUserState();
 
-function useAuthUserState() {
+/* function useAuthUserState() {
     let unsubAuth = () => { };
 
     const user = ref({
@@ -41,7 +41,7 @@ function useAuthUserState() {
         posts,
     }
 
-}
+} */
 
 /* export default {
     name: 'MyProfile',
