@@ -1,9 +1,20 @@
-<script>
+<script setup>
 import { RouterLink } from 'vue-router';
 import MainH1 from '../components/MainH1.vue';
 import { getAllPosts } from '../services/posts';
+import { onMounted, ref } from 'vue';
 
-export default {
+const posts = ref([]);
+
+onMounted(async () => {
+    try {
+        posts.value = await getAllPosts();
+    } catch (error) {
+        console.error("Error al cargar los posts en Home: ", error);
+    }
+});
+
+/* export default {
     name: 'Home',
     components: { MainH1 },
     data() {
@@ -18,7 +29,7 @@ export default {
             console.error("Error al cargar los posts en Home: ", error)
         }
     }
-}
+} */
 </script>
 
 <template>
