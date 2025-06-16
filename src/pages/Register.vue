@@ -1,8 +1,28 @@
-<script>
+<script setup>
+import { ref } from 'vue';
 import MainH1 from '../components/MainH1.vue';
 import { register } from '../services/auth';
 
-export default {
+
+const user = ref({
+    email: "",
+    password: "",
+});
+
+const loading = ref(false);
+
+async function handleSubmit() {
+    try {
+        loading.value = true;
+        await register(user.value.email, user.value.password);
+    } catch (error) {
+        console.error("error: ",error)
+        throw error;
+    }
+    loading.value = false;
+}
+
+/* export default {
     name: 'Register',
     components: { MainH1 },
     data() {
@@ -25,7 +45,7 @@ export default {
             }
         },
     }
-}
+} */
 </script>
 
 <template>

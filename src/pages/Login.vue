@@ -16,11 +16,11 @@ async function handleSubmit(){
     try {
         loading.value = true
         await login(user.value.email, user.value.password);
-        loading.value = false
     } catch (error) {
         console.error("error: ",error)
         throw error;
     }
+    loading.value = false
 }
 
 // API OPCIONES
