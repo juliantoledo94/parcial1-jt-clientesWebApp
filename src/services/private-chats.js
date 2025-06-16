@@ -7,7 +7,7 @@ import supabase from "./supabase";
 let privateChatIdsCache = {};
 
 //levantamos del cache los ids que tengamos almacenados
-if(localStorage.getItem("privateChatIds")){
+if (localStorage.getItem("privateChatIds")) {
     privateChatIdsCache = JSON.parse(localStorage.getItem("privateChatIds"));
 }
 
@@ -21,7 +21,7 @@ async function getPrivateChat(sender_id, receiver_id) {
 
     const cacheKey = [sender_id, receiver_id].sort().join("_");
 
-    if(privateChatIdsCache[cacheKey]) return privateChatIdsCache[cacheKey]
+    if (privateChatIdsCache[cacheKey]) return privateChatIdsCache[cacheKey]
 
     let chat_id = await fetchPrivateChat(sender_id, receiver_id);
 
@@ -30,7 +30,7 @@ async function getPrivateChat(sender_id, receiver_id) {
     }
 
     privateChatIdsCache[cacheKey] = chat_id;
-    localStorage.setItem("privateChatIds",JSON.stringify(privateChatIdsCache));
+    localStorage.setItem("privateChatIds", JSON.stringify(privateChatIdsCache));
 
     return chat_id;
 }
@@ -63,6 +63,7 @@ async function fetchPrivateChat(sender_id, receiver_id) {
     // usamos el ? por si es undefined o null nos retorne justamente eso.
     return data[0]?.id;
 }
+
 
 
 
@@ -138,7 +139,7 @@ export async function suscribeToPrivateNewMessages(sender_id, receiver_id, callb
         },
         payload => {
             callback(payload.new);
-           
+
         }
     );
     //1:11 clase 13/05
@@ -152,13 +153,13 @@ export async function suscribeToPrivateNewMessages(sender_id, receiver_id, callb
  * @param {string} receiver_id 
  * @returns {Promise<{id:number, chat_id:number, sender_id:string, body:string, created_at:string}[]}
  */
-export async function getLastPrivateChatMessages(sender_id, receiver_id, ) {
+export async function getLastPrivateChatMessages(sender_id, receiver_id,) {
     const chat_id = await getPrivateChat(sender_id, receiver_id);
 
-    const { data, error }  = await supabase
-    .from("private_messages")
-    .select()
-    .eq("chat_id", chat_id)
+    const { data, error } = await supabase
+        .from("private_messages")
+        .select()
+        .eq("chat_id", chat_id)
 
     if (error) {
         console.error("[private-chats.js getLastPrivateChatMessages] Error al traer los últimos mensajes  de chat privado: ", error);
