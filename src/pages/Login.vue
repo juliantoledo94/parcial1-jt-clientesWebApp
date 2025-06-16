@@ -1,8 +1,31 @@
-<script>
+<script setup>
+import { ref } from 'vue';
 import MainH1 from '../components/MainH1.vue';
 import { login } from '../services/auth';
 
-export default {
+
+//API COMPOSICIÓN
+const user = ref({
+    email: "",
+    password: "",
+});
+
+const loading = ref(false);
+
+async function handleSubmit(){
+    try {
+        loading.value = true
+        await login(user.value.email, user.value.password);
+        loading.value = false
+    } catch (error) {
+        console.error("error: ",error)
+        throw error;
+    }
+}
+
+// API OPCIONES
+
+/* export default {
     name: 'Login',
     components: { MainH1 },
     data() {
@@ -22,16 +45,13 @@ export default {
                 this.loading = false;
 
                 this.$router.push('/');
-                // Emitimos un evento "login" con los datos del usuario que se autenticó.
-                // De esta forma, cualquier elemento contenedor (como App) va a poder escuchar ese evento y recibir los 
-                // datos.
-                // this.$emit('login', {id: this.user.id, email: this.user.email});
+               
             } catch (error) {
-                // TODO: Manejar
+                
             }
         }
     }
-}
+} */
 </script>
 
 <template>
