@@ -8,29 +8,41 @@ import { onMounted, ref } from 'vue';
 
 const router = useRoute();
 
-const user = ref({
-    id: null,
-    email: null,
-    bio: null,
-    display_name: null,
-    career: null,
-});
+const {user, loading, posts} = useUserProfile(router.params.id)
 
-const loading = ref(false); // ← corregido el typo
-const posts = ref([]);
+function useUserProfile(id) {
 
-onMounted(async () => {
-    try {
-        loading.value = true;
+    const user = ref({
+        id: null,
+        email: null,
+        bio: null,
+        display_name: null,
+        career: null,
+    });
 
-        user.value = await getUserProfileById(router.params.id);
-        posts.value = await getPostsByUserId(router.params.id);
-        loading.value = false;
-    } catch (error) {
-        console.error("Error: ", error)
-        throw error;
+    const loading = ref(false); // ← corregido el typo
+    const posts = ref([]);
+
+    onMounted(async () => {
+        try {
+            loading.value = true;
+
+            user.value = await getUserProfileById(id);
+            posts.value = await getPostsByUserId(id);
+            loading.value = false;
+        } catch (error) {
+            console.error("Error: ", error)
+            throw error;
+        }
+    });
+
+    return {
+        user,
+        loading,
+        posts,
     }
-});
+
+}
 
 /* export default {
     name: 'UserProfile',
