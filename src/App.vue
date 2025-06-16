@@ -1,9 +1,31 @@
-<script>
+<script setup>
+import { useRoute } from 'vue-router';
+import { logout } from './services/auth';
+import useAuthUserState from './composables/useAuthUserState';
+
+const router = useRoute();
+const { user } = useAuthUserState();
+const {handleLogout} = useLogout(router);
 
 
-import { logout, subscribeToUserState } from './services/auth';
+useLogout(router)
 
-export default {
+
+
+function useLogout(router) {
+
+  function handleLogout() {
+
+    logout();
+    router.push("/ingresar");
+  }
+
+  return {
+    handleLogout,
+  }
+}
+
+/* export default {
     
     name: 'App',
    
@@ -27,7 +49,7 @@ export default {
         // Nos suscribimos al estado de autenticación.
         subscribeToUserState(newUserState => this.user = newUserState);
     }
-}
+} */
 </script>
 
 <!-- <template>
