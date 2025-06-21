@@ -5,12 +5,13 @@ import { getUserProfileById } from '../services/user-profiles';
 import { getPostsByUserId } from '../services/posts';
 import { RouterLink, useRoute } from 'vue-router';
 import { onMounted, ref } from 'vue';
+import useUserProfile from '../composables/useUserProfile';
 
 const router = useRoute();
 
 const {user, loading, posts} = useUserProfile(router.params.id)
 
-function useUserProfile(id) {
+/* function useUserProfile(id) {
 
     const user = ref({
         id: null,
@@ -42,7 +43,7 @@ function useUserProfile(id) {
         posts,
     }
 
-}
+} */
 
 /* export default {
     name: 'UserProfile',
