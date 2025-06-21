@@ -5,12 +5,12 @@ import { loadLastGlobalChatMessages, saveGlobalChatMessage, subscribeToGlobalCha
 
 import MainLoader from '../components/MainLoader.vue';
 import useAuthUserState from '../composables/useAuthUserState';
-import useScrollToBottomToBottom from '../composables/useScrollToBottom';
+import useScrollToBottom from '../composables/useScrollToBottom';
 
 const { user } = useAuthUserState();
 const { messages, loadingMessages } = useGlobalChatMessages();
 const { newMessage, sendMessage } = useGlobalChatForm(user);
-const { moveScrollToBottom } = useScrollToBottomToBottom("chatContainer")
+const { moveScrollToBottom } = useScrollToBottom("chatContainer")
 
 /* async function moveScroll() {
     await nextTick();

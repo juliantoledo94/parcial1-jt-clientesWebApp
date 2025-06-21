@@ -1,13 +1,75 @@
-<script>
-import { nextTick } from 'vue';
+<script setup>
+import { nextTick, onMounted, ref } from 'vue';
 import MainButton from '../components/MainButton.vue';
 import MainH1 from '../components/MainH1.vue';
 import MainLoader from '../components/MainLoader.vue';
 import { subscribeToUserState } from '../services/auth';
 import { getLastPrivateChatMessages, sendPrivateChatMessage, suscribeToPrivateNewMessages } from '../services/private-chats';
 import { getUserProfileById } from '../services/user-profiles';
+import useAuthUserState from '../composables/useAuthUserState';
+import useUserProfile from '../composables/useUserProfile';
+import { useRoute } from 'vue-router';
+import useScrollToBottom from '../composables/useScrollToBottom';
 
-export default {
+const route = useRoute();
+const { user: userAuth } = useAuthUserState();
+const { user: userChat, loading: loadingUser } = useUserProfile(route.params.id);
+const { newMessage, sendMessage } = usePrivateChatForm(userAuth, route.params.id)
+const { messages, loading: loadingMessages } = usePrivateChatMessages(userAuth, route.params.id)
+/* suscribeToPrivateNewMessages */
+function usePrivateChatMessages(userAuth, userChatId) {
+    const messages = ref([]);
+    const loading = ref(false)
+    const { moveScrollToBottom } = useScrollToBottom("chatContainer");
+
+    onMounted(async () => {
+
+        try {
+            loading.value = true;
+            messages.value = await getLastPrivateChatMessages(userAuth.value.id, userChatId);
+            loading.value= false;
+            moveScrollToBottom();
+
+            suscribeToPrivateNewMessages(userAuth.value.id, userChatId, async newMessage => {
+                messages.value.push(newMessage);
+                await nextTick();
+                moveScrollToBottom();
+            })
+
+        } catch (error) {
+            console.error("Error: ", error);
+            throw error;
+        }
+    })
+
+    return {
+        messages,
+        loading,
+    }
+}
+
+function usePrivateChatForm(userAuth, userChatId) {
+    const newMessage = ref({
+        body: "",
+    });
+
+    async function sendMessage() {
+        try {
+            sendPrivateChatMessage(userAuth.value.id, userChatId, newMessage.value.body);
+            newMessage.value.body = "";
+        } catch (error) {
+            console.error("Error: ", error);
+            throw error;
+        }
+    }
+
+    return {
+        newMessage,
+        sendMessage,
+    }
+}
+
+/* export default {
     name: "PrivateChat",
     components: { MainH1, MainLoader, MainButton },
     data() {
@@ -79,7 +141,7 @@ export default {
     }
 
 }
-
+ */
 //min 1:18 clase 20/05
 </script>
 
@@ -93,7 +155,7 @@ export default {
         <section ref="chatContainer" class="overflow-y-auto  h-100 p-4 mb-4 border border-gray-400 rounded">
             <h2 class="sr-only">Lista de mensajes</h2>
 
-            <ul v-if="!loadingMessage" class="flex items-start flex-col gap-4">
+            <ul v-if="!loadingMessages" class="flex items-start flex-col gap-4">
 
                 <li v-for="message in messages" :key="message.id" class="flex flex-col  gap-0.5 max-w-8/12 p-4 rounded"
                     :class='{
