@@ -1,16 +1,17 @@
-import { nextTick, useTemplateRef } from "vue";
+// useScrollToBottom.js
+import { nextTick } from 'vue';
 
-// export default function useScrollToBottom(container) {
-//     // const chatContainer = useTemplateRef(refId);
-export default function useScrollToBottom(refId) {
-    const container = useTemplateRef(refId);
-
-    async function moveScrollToBottom() {
-        await nextTick();
-        container.value.scrollTop = container.value.scrollHeight;
+export default function useScrollToBottom(containerRef) {
+  async function moveScrollToBottom() {
+    await nextTick();
+    if (containerRef.value) {
+      containerRef.value.scrollTop = containerRef.value.scrollHeight;
+    } else {
+      console.warn("containerRef aún es null");
     }
+  }
 
-    return {
-        moveScrollToBottom,
-    }
+  return {
+    moveScrollToBottom,
+  }
 }

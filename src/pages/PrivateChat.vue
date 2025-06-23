@@ -18,7 +18,8 @@ const { user: userChat, loading: loadingUser } = useUserProfile(route.params.id)
 const { newMessage, sendMessage } = usePrivateChatForm(userAuth, userChat)
 /* const { messages, loading: loadingMessages } = usePrivateChatMessages(userAuth, route.params.id) */
 const { messages, loading: loadingMessages } = usePrivateChatMessages(userAuth, userChat)
-const { moveScrollToBottom } = useScrollToBottom("ChatContainer");
+const chatContainer = ref(null);
+const { moveScrollToBottom } = useScrollToBottom(chatContainer);
 
 function usePrivateChatMessages(userAuth, userChat) {
     const messages = ref([]);
