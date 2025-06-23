@@ -11,6 +11,8 @@ const router = useRoute();
 
 const {user, loading, posts} = useUserProfile(router.params.id)
 
+
+//Funcion migro a composable.
 /* function useUserProfile(id) {
 
     const user = ref({
@@ -45,6 +47,8 @@ const {user, loading, posts} = useUserProfile(router.params.id)
 
 } */
 
+
+//API OPCIONES
 /* export default {
     name: 'UserProfile',
     components: { MainH1, MainLoader },

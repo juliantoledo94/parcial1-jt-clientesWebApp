@@ -183,18 +183,17 @@ export async function updateAuthUserPassword(password) {
  * @param {({id: string|null, email: string|null}) => void} callback 
  */
 export function subscribeToUserState(callback) {
-    // Agregamos el callback al stack de observers.
+    
     observers.push(callback);
 
-    // console.log("[Observer auth] Se agregó un nuevo observer. El stack actualizado es: ", observers);
+   
 
-    // Ejecutamos el callback para pasarle los datos actuales.
     notify(callback);
 
     // Retornamos una nueva función que elimina el callback de la lista de observers.
     return () => {
         observers = observers.filter(obs => obs !== callback);
-        // console.log("[Observer auth] Se removió un observer. El stack actualizado es: ", observers);
+        
     };
 }
 

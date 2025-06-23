@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, onMounted, ref } from 'vue';
+import { nextTick, onMounted, ref, watch } from 'vue';
 import MainButton from '../components/MainButton.vue';
 import MainH1 from '../components/MainH1.vue';
 import MainLoader from '../components/MainLoader.vue';
@@ -9,37 +9,44 @@ import { getUserProfileById } from '../services/user-profiles';
 import useAuthUserState from '../composables/useAuthUserState';
 import useUserProfile from '../composables/useUserProfile';
 import { useRoute } from 'vue-router';
+import useScrollToBottom from '../composables/useScrollToBottom';
 
-// clase 03/06/2025 -> min 21:33
+// clase 03/06/2025 -> min 45:25
 const route = useRoute();
 const { user: userAuth } = useAuthUserState();
 const { user: userChat, loading: loadingUser } = useUserProfile(route.params.id);
-const { newMessage, sendMessage } = usePrivateChatForm(userAuth, route.params.id)
-const { messages, loading: loadingMessages } = usePrivateChatMessages(userAuth, route.params.id)
-/* suscribeToPrivateNewMessages */
-function usePrivateChatMessages(userAuth, userChatId) {
+const { newMessage, sendMessage } = usePrivateChatForm(userAuth, userChat)
+/* const { messages, loading: loadingMessages } = usePrivateChatMessages(userAuth, route.params.id) */
+const { messages, loading: loadingMessages } = usePrivateChatMessages(userAuth, userChat)
+const { moveScrollToBottom } = useScrollToBottom("ChatContainer");
+
+function usePrivateChatMessages(userAuth, userChat) {
     const messages = ref([]);
     const loading = ref(false)
-    
+
 
     onMounted(async () => {
+        watch(userChat, async (newUserChat, oldUserChat) => {
+            if (newUserChat.id != null) {
+                try {
+                    loading.value = true;
+                    messages.value = await getLastPrivateChatMessages(userAuth.value.id, userChat.value.id);
+                    loading.value = false;
+                    moveScrollToBottom();
 
-        try {
-            loading.value = true;
-            messages.value = await getLastPrivateChatMessages(userAuth.value.id, userChatId);
-            loading.value= false;
-            
+                    suscribeToPrivateNewMessages(userAuth.value.id, userChat.value.id, async newMessage => {
+                        messages.value.push(newMessage);
 
-            suscribeToPrivateNewMessages(userAuth.value.id, userChatId, async newMessage => {
-                messages.value.push(newMessage);
-                
-               
-            })
+                        moveScrollToBottom();
+                    })
 
-        } catch (error) {
-            console.error("Error: ", error);
-            throw error;
-        }
+                } catch (error) {
+                    console.error("Error: ", error);
+                    throw error;
+                }
+            }
+        });
+
     })
 
     return {
@@ -48,14 +55,14 @@ function usePrivateChatMessages(userAuth, userChatId) {
     }
 }
 
-function usePrivateChatForm(userAuth, userChatId) {
+function usePrivateChatForm(userAuth, userChat) {
     const newMessage = ref({
         body: "",
     });
 
     async function sendMessage() {
         try {
-            sendPrivateChatMessage(userAuth.value.id, userChatId, newMessage.value.body);
+            sendPrivateChatMessage(userAuth.value.id, userChat.value.id, newMessage.value.body);
             newMessage.value.body = "";
         } catch (error) {
             console.error("Error: ", error);

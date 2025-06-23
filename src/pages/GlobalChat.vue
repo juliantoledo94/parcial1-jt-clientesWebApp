@@ -140,7 +140,7 @@ function useGlobalChatForm(user) {
     <MainH1>Chat global</MainH1>
 
     <div class="flex gap-4">
-        <section ref="chatContainer" class="overflow-y-auto w-9/12 h-100 p-4 border border-gray-400 rounded">
+        <section ref="chatContainer" id= "chatContainer" class="overflow-y-auto w-9/12 h-100 p-4 border border-gray-400 rounded">
             <h2 class="sr-only">Lista de mensajes</h2>
 
             <ul v-if="!loadingMessages" class="flex flex-col gap-4">
