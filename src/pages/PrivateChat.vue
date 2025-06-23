@@ -9,8 +9,8 @@ import { getUserProfileById } from '../services/user-profiles';
 import useAuthUserState from '../composables/useAuthUserState';
 import useUserProfile from '../composables/useUserProfile';
 import { useRoute } from 'vue-router';
-import useScrollToBottom from '../composables/useScrollToBottom';
 
+// clase 03/06/2025 -> min 21:33
 const route = useRoute();
 const { user: userAuth } = useAuthUserState();
 const { user: userChat, loading: loadingUser } = useUserProfile(route.params.id);
@@ -20,7 +20,7 @@ const { messages, loading: loadingMessages } = usePrivateChatMessages(userAuth, 
 function usePrivateChatMessages(userAuth, userChatId) {
     const messages = ref([]);
     const loading = ref(false)
-    const { moveScrollToBottom } = useScrollToBottom("chatContainer");
+    
 
     onMounted(async () => {
 
@@ -28,12 +28,12 @@ function usePrivateChatMessages(userAuth, userChatId) {
             loading.value = true;
             messages.value = await getLastPrivateChatMessages(userAuth.value.id, userChatId);
             loading.value= false;
-            moveScrollToBottom();
+            
 
             suscribeToPrivateNewMessages(userAuth.value.id, userChatId, async newMessage => {
                 messages.value.push(newMessage);
-                await nextTick();
-                moveScrollToBottom();
+                
+               
             })
 
         } catch (error) {
