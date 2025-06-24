@@ -115,15 +115,21 @@ const { user, posts } = useAuthUserState();
 
         </dl>
 
+
+        <!-- clase 10/ 06 38:53 -->
         <div class="row flex flex-wrap gap-4">
 
             <div class="border border-white rounded-xl bg-[#1f3d2e] text-[#9ee37d] hover:text-white p-2">
 
-                <RouterLink to="/mi-perfil/editar" class="mb-4 ">Editar Perfil</RouterLink>
+                <RouterLink to="/mi-perfil/editar" class="mb-4 ">Editar perfil</RouterLink>
+            </div>
+            <div class="border border-white rounded-xl bg-[#1f3d2e] text-[#9ee37d] hover:text-white p-2">
+
+                <RouterLink to="/mi-perfil/editar/avatar" class="mb-4 ">Editar imagen</RouterLink>
             </div>
             <div class="border border-white rounded-xl bg-[#1f3d2e]  text-[#9ee37d] hover:text-white p-2">
 
-                <RouterLink to="/mi-perfil/new-post" class="mb-4 ">Crear Post</RouterLink>
+                <RouterLink to="/mi-perfil/new-post" class="mb-4 ">Crear post</RouterLink>
             </div>
         </div>
 
