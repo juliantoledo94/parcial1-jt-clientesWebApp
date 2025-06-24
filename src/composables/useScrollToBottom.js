@@ -1,4 +1,4 @@
-// useScrollToBottom.js
+
 import { nextTick } from 'vue';
 
 export default function useScrollToBottom(containerRef) {

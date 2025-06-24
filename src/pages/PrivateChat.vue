@@ -11,7 +11,7 @@ import useUserProfile from '../composables/useUserProfile';
 import { useRoute } from 'vue-router';
 import useScrollToBottom from '../composables/useScrollToBottom';
 
-// clase 03/06/2025 -> min 45:25
+
 const route = useRoute();
 const { user: userAuth } = useAuthUserState();
 const { user: userChat, loading: loadingUser } = useUserProfile(route.params.id);
@@ -20,6 +20,8 @@ const { newMessage, sendMessage } = usePrivateChatForm(userAuth, userChat)
 const { messages, loading: loadingMessages } = usePrivateChatMessages(userAuth, userChat)
 const chatContainer = ref(null);
 const { moveScrollToBottom } = useScrollToBottom(chatContainer);
+
+
 
 function usePrivateChatMessages(userAuth, userChat) {
     const messages = ref([]);
