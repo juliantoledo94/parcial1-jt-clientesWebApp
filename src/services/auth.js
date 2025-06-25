@@ -70,6 +70,7 @@ async function loadUserExtendedProfile() {
             display_name: profileData.display_name,
             bio: profileData.bio,
             career: profileData.career,
+            photo: profileData.photo,
         });
     } catch (error) {
         console.error('[auth.js loadUserExtendedProfile] Error al traer el perfil extendido del usuario: ', error);

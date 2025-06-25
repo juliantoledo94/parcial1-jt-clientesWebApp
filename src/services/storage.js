@@ -27,3 +27,8 @@ export function getFileUrl(filename, bucket ="avatars"){
 
     return data.publicUrl;
 }
+
+
+export async function deleteFile(filename, bucket ="avatars"){
+    
+}

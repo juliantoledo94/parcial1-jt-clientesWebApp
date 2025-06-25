@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import MainButton from '../components/MainButton.vue';
 import MainH1 from '../components/MainH1.vue';
 import MainLoader from '../components/MainLoader.vue';
@@ -55,6 +55,8 @@ function useAvatarUploadForm() {
 
         avatar.value.objectUrl = URL.createObjectURL(avatar.value.file);
     }
+
+    onMounted(() => avatar.value ? URL.revokeObjectURL(avatar.value) : "");
 
 
     return {
