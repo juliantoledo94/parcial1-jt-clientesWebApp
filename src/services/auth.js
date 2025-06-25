@@ -1,3 +1,4 @@
+import { uploadFile } from "./storage";
 import supabase from "./supabase";
 import { createUserProfile, getUserProfileById, updateUserProfile } from "./user-profiles";
 
@@ -233,4 +234,17 @@ function updateUser(data) {
     }
 
     notifyAll();
+}
+
+/**
+ * 
+ * @param {File} file 
+ */
+export async function updateAuthUserAvatar(file) {
+    try {
+        const filename = `${user.id}/${crypto.randomUUID()}.jpg`
+        await uploadFile(filename, file);
+    } catch (error) {
+        throw error;
+    }
 }

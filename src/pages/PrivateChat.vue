@@ -152,7 +152,7 @@ function usePrivateChatForm(userAuth, userChat) {
 
 }
  */
-//min 1:18 clase 20/05
+
 </script>
 
 

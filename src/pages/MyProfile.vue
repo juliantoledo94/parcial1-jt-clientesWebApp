@@ -116,7 +116,7 @@ const { user, posts } = useAuthUserState();
         </dl>
 
 
-        <!-- clase 10/ 06 38:53 -->
+       
         <div class="row flex flex-wrap gap-4">
 
             <div class="border border-white rounded-xl bg-[#1f3d2e] text-[#9ee37d] hover:text-white p-2">

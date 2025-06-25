@@ -3,10 +3,11 @@ import { ref } from 'vue';
 import MainButton from '../components/MainButton.vue';
 import MainH1 from '../components/MainH1.vue';
 import MainLoader from '../components/MainLoader.vue';
+import { updateAuthUserAvatar } from '../services/auth';
 
-const {avatar, updating, handleSubmit, handleFileChange} = useAvatarUploadForm();
+const { avatar, updating, handleSubmit, handleFileChange } = useAvatarUploadForm();
 
-function useAvatarUploadForm(){
+function useAvatarUploadForm() {
     const avatar = ref({
         file: null,
         objectUrl: null,
@@ -14,13 +15,47 @@ function useAvatarUploadForm(){
     })
     const updating = ref(false);
 
-    async function handleSubmit(){
+    async function handleSubmit() {
+        try {
 
+            if (!avatar.value.file) return;
+
+            if (updating.value) return;
+
+            try {
+                updating.value = true;
+                await updateAuthUserAvatar(avatar.value.file);
+
+            } catch (error) {
+                console.error("Error: ", error)
+                throw error;
+            }
+            updating.value = false;
+        } catch (error) {
+
+        }
     }
 
-    async function handleFileChange(){
+    async function handleFileChange(event) {
 
+        const selectedFile = event.target.files[0];
+
+        console.log("Archivos del input: ", event.target.files);
+        console.log("El archivo seleccionado: ", selectedFile);
+
+        if (!selectedFile) return;
+
+        avatar.value.file = selectedFile;
+
+        /*  preguntamos si hay objetUrl viejos para revocarlos y evitar memoryleaks */
+
+        if (avatar.value.objectUrl) {
+            URL.revokeObjectURL(avatar.value.objectUrl);
+        }
+
+        avatar.value.objectUrl = URL.createObjectURL(avatar.value.file);
     }
+
 
     return {
         avatar,
@@ -36,14 +71,16 @@ function useAvatarUploadForm(){
 <template>
     <MainH1>Editar mi imagen de perfil</MainH1>
 
-    <form action="#" class="flex gap-4 mb-4">
+    <form action="#" class="flex gap-4 mb-4" @submit.prevent="handleSubmit">
         <div class="w-1/2">
 
             <div class="mb-4">
 
                 <label for="avatar" class="block mb-2 text-white">Nueva imagen de perfil</label>
+
                 <input type="file" id="avatar"
-                    class="w-full p-2 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg">
+                    class="w-full p-2 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg"
+                    @change="handleFileChange">
 
             </div>
 
@@ -53,14 +90,10 @@ function useAvatarUploadForm(){
                 <MainLoader v-else />
             </MainButton>
         </div>
-        <!--  Columna del preview -->
+        <!--  Columna del preview 10/06 min 50:30 clase -->
         <div class="w-1/2">
 
-            <img 
-                v-if="avatar.objectUrl"
-                :src="avatar.objectUrl" 
-            
-                alt="">
+            <img v-if="avatar.objectUrl" :src="avatar.objectUrl" alt="">
         </div>
     </form>
 
