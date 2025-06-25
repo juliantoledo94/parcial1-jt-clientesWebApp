@@ -1,4 +1,4 @@
-import { uploadFile } from "./storage";
+import { getFileUrl, uploadFile } from "./storage";
 import supabase from "./supabase";
 import { createUserProfile, getUserProfileById, updateUserProfile } from "./user-profiles";
 
@@ -23,6 +23,7 @@ let user = {
     display_name: null,
     bio: null,
     career: null,
+    photo: null,
 }
 
 // Definimos un array para guardar la lista de observers que quieren ser notificados de los cambios en "user".
@@ -34,7 +35,7 @@ loadInitialUserState();
 //Verificamos is tenemos un usuario en localstorage que figure como auntenticado si existe los usamos para marcar 
 // al usuario como autenticado
 
-if(localStorage.getItem("user")){
+if (localStorage.getItem("user")) {
     user = JSON.parse(localStorage.getItem("user"));
 }
 
@@ -45,7 +46,7 @@ if(localStorage.getItem("user")){
 async function loadInitialUserState() {
     const { data } = await supabase.auth.getUser();
 
-    if(!data.user) return;
+    if (!data.user) return;
 
     updateUser({
         id: data.user.id,
@@ -64,12 +65,12 @@ async function loadInitialUserState() {
 async function loadUserExtendedProfile() {
     try {
         const profileData = await getUserProfileById(user.id);
-        
+
         updateUser({
             display_name: profileData.display_name,
             bio: profileData.bio,
             career: profileData.career,
-        });   
+        });
     } catch (error) {
         console.error('[auth.js loadUserExtendedProfile] Error al traer el perfil extendido del usuario: ', error);
         throw error;
@@ -88,7 +89,7 @@ export async function register(email, password) {
         password,
     });
 
-    if(error) {
+    if (error) {
         console.error('[auth.js register] Error al crear una cuenta: ', error);
         throw error;
     }
@@ -116,7 +117,7 @@ export async function login(email, password) {
         password,
     });
 
-    if(error) {
+    if (error) {
         console.error('[auth.js login] Error al iniciar sesión: ', error);
         throw error;
     }
@@ -126,7 +127,7 @@ export async function login(email, password) {
         id: data.user.id,
         email: data.user.email,
     });
-    
+
     loadUserExtendedProfile();
 
     return data.user;
@@ -137,11 +138,12 @@ export async function logout() {
 
     // Vaciamos los datos del usuario y notificamos a los observers del cambio.
     updateUser({
-        id: null, 
+        id: null,
         email: null,
         bio: null,
         display_name: null,
         career: null,
+        photo: null,
     });
 
 }
@@ -165,12 +167,12 @@ export async function updateAuthUserProfile(data) {
 export async function updateAuthUserPassword(password) {
 
     try {
-        await supabase.auth.updateUser({password});
+        await supabase.auth.updateUser({ password });
     } catch (error) {
-         console.error('[auth.js updateAuthUserPassword] Error al actualizar el password del usuario autenticado: ', error);
+        console.error('[auth.js updateAuthUserPassword] Error al actualizar el password del usuario autenticado: ', error);
         throw error;
     }
-    
+
 }
 
 /*----------------------------------------------------------------------
@@ -184,17 +186,17 @@ export async function updateAuthUserPassword(password) {
  * @param {({id: string|null, email: string|null}) => void} callback 
  */
 export function subscribeToUserState(callback) {
-    
+
     observers.push(callback);
 
-   
+
 
     notify(callback);
 
     // Retornamos una nueva función que elimina el callback de la lista de observers.
     return () => {
         observers = observers.filter(obs => obs !== callback);
-        
+
     };
 }
 
@@ -204,7 +206,7 @@ export function subscribeToUserState(callback) {
  * @param {({id: string|null, email: string|null}) => void} callback 
  */
 function notify(callback) {
-    callback({...user});
+    callback({ ...user });
 }
 
 /**
@@ -226,10 +228,10 @@ function updateUser(data) {
         ...data,
     }
 
-    if(user.id !== null){
+    if (user.id !== null) {
 
-        localStorage.setItem("user",JSON.stringify(user))
-    }else{
+        localStorage.setItem("user", JSON.stringify(user))
+    } else {
         localStorage.removeItem("user");
     }
 
@@ -244,6 +246,11 @@ export async function updateAuthUserAvatar(file) {
     try {
         const filename = `${user.id}/${crypto.randomUUID()}.jpg`
         await uploadFile(filename, file);
+
+        await updateAuthUserProfile({
+            photo: getFileUrl(filename),
+
+        });
     } catch (error) {
         throw error;
     }

@@ -94,11 +94,16 @@ const { user, posts } = useAuthUserState();
 
 
         <div class=" italic text-white drop-shadow-[1px_1px_1px_rgba(0,0,0,0.7)] flex items-center">
-            <div class=" w-24 h-24 rounded-full border-2 border-white bg-[#1f3d2e] flex items-center justify-center  text-[#9ee37d] text-3xl font-bold me-5 mb-3"
+            <div class="overflow-hidden w-50 h-50 rounded-full border-2 border-white bg-[#1f3d2e] flex items-center justify-center  text-[#9ee37d] text-3xl font-bold me-5 mb-3"
                 style="font-family: 'Press Start 2P', cursive;">
+                <img v-if="user.photo" :src="user.photo" alt="Foto de perfil" class="w-full h-full object-cover" />
 
+                <!-- Inicial si no hay foto -->
+                <span v-else>
+                    {{ user.email?.charAt(0).toUpperCase() }}
+                </span>
 
-                {{ user?.email?.charAt(0).toUpperCase() }}
+                <!-- {{ user?.email?.charAt(0).toUpperCase() }} -->
 
             </div>
             {{ user.bio || 'Acá va mi biografía...' }}
@@ -116,7 +121,7 @@ const { user, posts } = useAuthUserState();
         </dl>
 
 
-       
+
         <div class="row flex flex-wrap gap-4">
 
             <div class="border border-white rounded-xl bg-[#1f3d2e] text-[#9ee37d] hover:text-white p-2">

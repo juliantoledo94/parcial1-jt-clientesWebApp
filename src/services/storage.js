@@ -14,3 +14,16 @@ export async function uploadFile(name, file, bucket = "avatars"){
         throw error;
     }
 }
+
+/**
+ * 
+ * @param {string} filename 
+ * @param {string} bucket 
+ * @returns {string} La url del recurso.
+ */
+export function getFileUrl(filename, bucket ="avatars"){
+
+    const { data } = supabase.storage.from(bucket).getPublicUrl(filename)
+
+    return data.publicUrl;
+}
