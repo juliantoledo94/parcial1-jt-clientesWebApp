@@ -60,3 +60,20 @@ export async function getAllPosts() {
 
   return data;
 }
+
+
+/**
+ * Elimina un post por ID
+ * @param {string} postId
+ */
+export async function deletePost(postId) {
+  const { error } = await supabase
+    .from('posts')
+    .delete()
+    .eq('id', postId);
+
+  if (error) {
+    console.error('[posts.js deletePost] Error al eliminar el post:', error);
+    throw error;
+  }
+}
