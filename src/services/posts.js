@@ -50,7 +50,7 @@ export async function getPostsByUserId(userId) {
 export async function getAllPosts() {
   const { data, error } = await supabase
   .from("posts")
-  .select("*, user: user_profiles(display_name, email, id)")
+  .select("*, user: user_profiles(display_name, email, id, photo)")
   .order("created_at",{ascending:false});
 
   if(error){

@@ -47,13 +47,22 @@ onMounted(async () => {
             <div v-for="post in posts" :key="post.id"
                 class="p-6 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg hover:shadow-xl transition duration-300 hover:-translate-y-1 hover:scale-100">
 
-               
 
-                <div
-                    class=" mb-4 w-24 h-24 rounded-full border-2 border-white bg-[#1f3d2e] mx-auto flex items-center justify-center  text-[#9ee37d] text-3xl font-bold " style="font-family: 'Press Start 2P', cursive;">
-                    
-                     <RouterLink :to="`/usuario/${post.user?.id}`" >
-                        {{ post.user?.email.charAt(0).toUpperCase() }}
+
+                <div class=" overflow-hidden mb-4 w-50 h-50 rounded-full border-2 border-white bg-[#1f3d2e] mx-auto flex items-center justify-center  text-[#9ee37d] text-3xl font-bold "
+                    style="font-family: 'Press Start 2P', cursive;">
+
+                    <RouterLink :to="`/usuario/${post.user?.id}`" class="w-full h-full  flex items-center justify-center "> <!-- el problema de las fotos esta aca en el router link que no ocupa el 100% -->
+                        
+
+                        <img v-if="post.user?.photo" :src="post.user.photo" alt="Foto de perfil"
+                            class="w-full h-full object-cover object-center  transform scale-110" />
+
+                     
+                        <span v-else class="">
+                            {{ post.user?.email?.charAt(0).toUpperCase() }}
+                        </span>
+                        <!-- {{ post.user?.email.charAt(0).toUpperCase() }} -->
                     </RouterLink>
                 </div>
                 <div class="bg-white/90 rounded-lg p-4 shadow-inner">
@@ -63,14 +72,14 @@ onMounted(async () => {
                             {{ post.title }}
                         </RouterLink>
                     </h3>
-    
+
                     <p class="text-sm text-gray-500 mb-2">
                         Por
                         <RouterLink :to="`/usuario/${post.user?.id}`" class="text-blue-600 hover:underline">
                             {{ post.user?.display_name || post.user?.email || 'Usuario desconocido' }}
                         </RouterLink>
                     </p>
-    
+
                     <p class="text-gray-700 line-clamp-3">{{ post.content }}</p>
                     <p class="text-xs text-gray-400 mt-2">{{ new Date(post.created_at).toLocaleString() }}</p>
                 </div>
