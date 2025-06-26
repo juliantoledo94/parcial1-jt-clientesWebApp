@@ -9,7 +9,7 @@ import useUserProfile from '../composables/useUserProfile';
 
 const router = useRoute();
 
-const {user, loading, posts} = useUserProfile(router.params.id)
+const { user, loading, posts } = useUserProfile(router.params.id)
 
 
 //Funcion migro a composable.
@@ -89,11 +89,18 @@ const {user, loading, posts} = useUserProfile(router.params.id)
         <MainH1>Perfil de {{ user.email }}</MainH1>
         <div class="p-2 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg">
             <div class=" italic text-white drop-shadow-[1px_1px_1px_rgba(0,0,0,0.7)] flex items-center">
-                <div class=" w-24 h-24 rounded-full border-2 border-white bg-[#1f3d2e] flex items-center justify-center  text-[#9ee37d] text-3xl font-bold me-5 mb-3"
+                <div class=" w-50 h-50 overflow-hidden rounded-full border-2 border-white bg-[#1f3d2e] flex items-center justify-center  text-[#9ee37d] text-3xl font-bold me-5 mb-3"
                     style="font-family: 'Press Start 2P', cursive;">
 
+                    <img v-if="user.photo" :src="user.photo" alt="Foto de perfil"
+                        class="w-full h-full object-cover object-center" />
 
-                    {{ user?.email?.charAt(0).toUpperCase() }}
+                    <!-- Inicial si no hay foto -->
+                    <span v-else>
+                        {{ user.email?.charAt(0).toUpperCase() }}
+                    </span>
+
+                    <!--   {{ user?.email?.charAt(0).toUpperCase() }} -->
 
                 </div>
                 {{ user.bio || 'Acá va mi biografía...' }}
