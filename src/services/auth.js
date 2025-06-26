@@ -1,4 +1,5 @@
-import { getFileUrl, uploadFile } from "./storage";
+import { getExtensionFromFile } from "../libraries/helpers";
+import { deleteFile, getFileUrl, uploadFile } from "./storage";
 import supabase from "./supabase";
 import { createUserProfile, getUserProfileById, updateUserProfile } from "./user-profiles";
 
@@ -245,13 +246,22 @@ function updateUser(data) {
  */
 export async function updateAuthUserAvatar(file) {
     try {
-        const filename = `${user.id}/${crypto.randomUUID()}.jpg`
+
+       const oldProfilePhoto = user.photo;
+
+
+        const filename = `${user.id}/${crypto.randomUUID()}.${getExtensionFromFile(file)}`
         await uploadFile(filename, file);
 
         await updateAuthUserProfile({
             photo: getFileUrl(filename),
 
         });
+
+        if(oldProfilePhoto){
+            const photoToDelete = oldProfilePhoto.slice(oldProfilePhoto.indexOf("/avatars/")+ 9);
+            deleteFile(photoToDelete);
+        }
     } catch (error) {
         throw error;
     }
