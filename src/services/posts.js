@@ -77,3 +77,20 @@ export async function deletePost(postId) {
     throw error;
   }
 }
+
+/**
+ * Editar un  post por id
+ * @param {*} postId 
+ * @param {*} data 
+ */
+export async function updatePost(postId, data) {
+  const { error } = await supabase
+    .from('posts')
+    .update(data)
+    .eq('id', postId);
+
+  if (error) {
+    console.error('[posts.js updatePost] Error al editar post:', error);
+    throw error;
+  }
+}

@@ -10,16 +10,16 @@ const { user, posts } = useAuthUserState();
 
 
 async function handleDelete(post) {
-  if (!confirm('¿Seguro que querés eliminar este post?')) return;
+    if (!confirm('¿Seguro que querés eliminar este post?')) return;
 
-  try {
-    await deletePost(post.id);
-    // Eliminarlo del array local de posts
-    posts.value = posts.value.filter(p => p.id !== post.id);
-  } catch (error) {
-    alert('Error al eliminar el post.');
-    console.error(error);
-  }
+    try {
+        await deletePost(post.id);
+        // Eliminarlo del array local de posts
+        posts.value = posts.value.filter(p => p.id !== post.id);
+    } catch (error) {
+        alert('Error al eliminar el post.');
+        console.error(error);
+    }
 }
 
 /* function useAuthUserState() {
@@ -165,12 +165,18 @@ async function handleDelete(post) {
         <div v-else class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <div v-for="post in posts" :key="post.id"
                 class="p-6 rounded-xl border border-gray-300 bg-white/80 backdrop-blur-sm shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_25px_rgba(0,0,0,0.25)] transition duration-300 hover:-translate-y-1 hover:scale-100">
+                <!-- Botón Editar -->
+                <RouterLink :to="`/mi-perfil/editar-post/${post.id}`"
+                    class=" top-2 left-2 text-blue-600 hover:text-blue-800 text-sm font-bold">
+                    Editar
+                </RouterLink>
 
                 <!-- Botón Eliminar -->
                 <button @click="handleDelete(post)"
-                    class="absolute top-2 right-2 text-red-600 hover:text-red-800 text-sm font-bold">
+                    class=" top-2 right-2 text-red-600 hover:text-red-800 text-sm font-bold">
                     Eliminar
                 </button>
+
 
                 <h3 class="text-lg font-bold">
                     <RouterLink :to="`/post/${post.id}`" class="text-lg font-bold mb-1 hover:underline block">
@@ -179,6 +185,7 @@ async function handleDelete(post) {
                     <!-- {{ post.title }} -->
 
                 </h3>
+
                 <p class="text-gray-700 mt-2 line-clamp-3">{{ post.content }}</p>
                 <p class="text-sm text-gray-400 mt-2">{{ new Date(post.created_at).toLocaleString() }}</p>
             </div>
