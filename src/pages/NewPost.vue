@@ -295,7 +295,7 @@ export default {
 
     <div class="w-1/2">
 
-      <img v-if="image.objectUrl" :src="image.objectUrl" alt="" class="w-full max-w-[200px] max-h-[200px] object-cover rounded-lg">
+      <img v-if="image.objectUrl" :src="image.objectUrl" alt="" class="w-full max-w-[200px] max-h-[200px] object-cover rounded-lg mb-4">
     </div>
 
     <MainButton type="submit">
