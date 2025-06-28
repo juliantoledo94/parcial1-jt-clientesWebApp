@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink } from 'vue-router';
 import MainH1 from '../components/MainH1.vue';
-import { getAllPosts, subscribeToAllPosts } from '../services/posts';
+import { getAllPosts, subscribeToAllPosts, subscribeToUpdatedPosts } from '../services/posts';
 import { onMounted, ref } from 'vue';
 import { subscribeToDeletedPosts } from '../services/post-comments';
 
@@ -16,9 +16,15 @@ onMounted(async () => {
         subscribeToAllPosts(newPost => {
             posts.value.unshift(newPost);
         });
-         subscribeToDeletedPosts(deletedId => {
-      posts.value = posts.value.filter(p => p.id !== deletedId);
-    });
+        subscribeToDeletedPosts(deletedId => {
+            posts.value = posts.value.filter(p => p.id !== deletedId);
+        });
+        subscribeToUpdatedPosts(updatedPost => {
+            const index = posts.value.findIndex(p => p.id === updatedPost.id);
+            if (index !== -1) {
+                posts.value[index] = updatedPost;
+            }
+        });
     } catch (error) {
         console.error("Error al cargar los posts en Home: ", error);
     }

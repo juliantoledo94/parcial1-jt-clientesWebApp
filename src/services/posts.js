@@ -134,6 +134,8 @@ export async function updatePostImage(file, userId, oldPhotoUrl = null) {
 }
 
 
+/* A PARTIR DE ACA SE AGREGAN LAS CONTROLLERS PARA CREAR EDITAR Y ELIMINAR EN TIEMPO REAL */
+
 
 /**
  * Escucha en tiempo real los nuevos posts creados y ejecuta el callback cuando se agregan.
@@ -180,6 +182,34 @@ export function subscribeToAllPosts(callback) {
     async (payload) => {
       const enrichedPost = await getPostByIdWithUser(payload.new.id);
       callback(enrichedPost);
+    }
+  );
+
+  channel.subscribe();
+}
+
+
+/**
+ * Escucha en tiempo real cuando un post es editado.
+ * Llama al callback con el post actualizado (enriquecido con datos del usuario).
+ * 
+ * @param {(updatedPost: object) => void} callback - Función que recibe el post actualizado.
+ */
+export function subscribeToUpdatedPosts(callback) {
+  const channel = supabase.channel('updated-posts', {
+    config: { broadcast: { self: true } },
+  });
+
+  channel.on(
+    'postgres_changes',
+    {
+      event: 'UPDATE',
+      schema: 'public',
+      table: 'posts',
+    },
+    async (payload) => {
+      const updatedPost = await getPostByIdWithUser(payload.new.id);
+      callback(updatedPost);
     }
   );
 
