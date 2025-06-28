@@ -41,14 +41,9 @@ export async function saveComment({post_id, user_id, email, content}){
 }
 
 /**
- * Escucha en tiempo real nuevos comentarios agregados a un post específico.
- * Llama al callback cada vez que se inserta un nuevo comentario en la base de datos para ese post.
- * 
- * @param {string} postId - ID del post que se quiere observar.
- * @param {(comment: object) => void} callback - Función a ejecutar cuando llega un nuevo comentario.
- * @returns {void}
- */
-export function subscribeToPostComments(postId, callback){
+ * ESTE CÓDIGO NO TRAIA LOS COMENTARIOS EN TIEMPO REAL
+ 
+/* export function subscribeToPostComments(postId, callback){
     const channel = supabase.channel(`comments-${postId}`,{
         config: { broadcast: { self: true } },
     });
@@ -63,7 +58,53 @@ export function subscribeToPostComments(postId, callback){
         },
         payload => callback(payload.new)
     )
+} */
+
+/**
+ * Escucha en tiempo real nuevos comentarios agregados a un post específico.
+ * Cuando se detecta un nuevo comentario, lo enriquece con los datos del usuario que lo escribió
+ * y lo pasa al callback.
+ * 
+ * @param {string} postId 
+ * @param {(comment: object) => void} callback 
+ */
+export function subscribeToPostComments(postId, callback) {
+  const channel = supabase.channel(`comments-${postId}`, {
+    config: { broadcast: { self: true } },
+  });
+
+  channel.on(
+    "postgres_changes",
+    {
+      event: "INSERT",
+      schema: "public",
+      table: "comments",
+      filter: `post_id=eq.${postId}`,
+    },
+    async (payload) => {
+      const { id } = payload.new;
+
+      // Trae el comentario con los datos del user
+      const { data, error } = await supabase
+        .from("comments")
+        .select("*, user:user_profiles(display_name,email,id)")
+        .eq("id", id)
+        .single();
+
+      if (error) {
+        console.error("[subscribeToPostComments] Error al enriquecer el comentario:", error);
+        return;
+      }
+
+      callback(data);
+    }
+  );
+
+  channel.subscribe();
 }
+
+
+
 
 /**
  * Trae un post específico por su ID, incluyendo los datos del usuario que lo creó.
