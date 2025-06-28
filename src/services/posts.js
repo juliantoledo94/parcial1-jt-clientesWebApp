@@ -51,11 +51,11 @@ export async function getPostsByUserId(userId) {
  */
 export async function getAllPosts() {
   const { data, error } = await supabase
-  .from("posts")
-  .select("*, user: user_profiles(display_name, email, id, photo)")
-  .order("created_at",{ascending:false});
+    .from("posts")
+    .select("*, user: user_profiles(display_name, email, id, photo)")
+    .order("created_at", { ascending: false });
 
-  if(error){
+  if (error) {
     console.error("[posts.js getAllPosts] Error al traer todos los posts", error);
     throw error;
   }
@@ -66,13 +66,20 @@ export async function getAllPosts() {
 
 /**
  * Elimina un post por ID
- * @param {string} postId
+ * @param {object} post
  */
-export async function deletePost(postId) {
+export async function deletePost(post) {
+
+  if (post.photo) {
+    const path = post.photo.slice(post.photo.indexOf('/post-images/') + 13);
+    await deleteFile(path, 'post-images');
+  }
+
+
   const { error } = await supabase
     .from('posts')
     .delete()
-    .eq('id', postId);
+    .eq('id', post.id);
 
   if (error) {
     console.error('[posts.js deletePost] Error al eliminar el post:', error);

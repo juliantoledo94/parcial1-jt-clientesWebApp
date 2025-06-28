@@ -13,7 +13,7 @@ async function handleDelete(post) {
     if (!confirm('¿Seguro que querés eliminar este post?')) return;
 
     try {
-        await deletePost(post.id);
+        await deletePost(post);
         // Eliminarlo del array local de posts
         posts.value = posts.value.filter(p => p.id !== post.id);
     } catch (error) {
