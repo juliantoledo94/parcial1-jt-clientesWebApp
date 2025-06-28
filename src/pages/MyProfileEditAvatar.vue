@@ -92,7 +92,7 @@ function useAvatarUploadForm() {
                 <MainLoader v-else />
             </MainButton>
         </div>
-        <!--  Columna del preview 10/06 min 50:30 clase -->
+        
         <div class="w-1/2">
 
             <img v-if="avatar.objectUrl" :src="avatar.objectUrl" alt="">

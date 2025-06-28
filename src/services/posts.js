@@ -1,3 +1,5 @@
+import { getExtensionFromFile } from "../libraries/helpers";
+import { deleteFile, getFileUrl, uploadFile } from "./storage";
 import supabase from "./supabase";
 
 /**
@@ -91,6 +93,34 @@ export async function updatePost(postId, data) {
 
   if (error) {
     console.error('[posts.js updatePost] Error al editar post:', error);
+    throw error;
+  }
+}
+
+
+/**
+ * Sube una imagen nueva para un post, y borra la anterior si hay.
+ *
+ * @param {File} file - Archivo de imagen nuevo.
+ * @param {string} userId - ID del usuario autenticado.
+ * @param {string|null} oldPhotoUrl - URL de la imagen anterior (si existe).
+ * @returns {Promise<string>} - URL pública de la nueva imagen.
+ */
+export async function updatePostImage(file, userId, oldPhotoUrl = null) {
+  try {
+    const filename = `${userId}/${crypto.randomUUID()}.${getExtensionFromFile(file)}`;
+    await uploadFile(filename, file, "post-images");
+
+    const newPhotoUrl = getFileUrl(filename, "post-images");
+
+    if (oldPhotoUrl) {
+      const photoToDelete = oldPhotoUrl.slice(oldPhotoUrl.indexOf("/post-images/") + 6);
+      await deleteFile(photoToDelete, "post-images");
+    }
+
+    return newPhotoUrl;
+  } catch (error) {
+    console.error("[posts.js updatePostImage] Error al actualizar imagen del post:", error);
     throw error;
   }
 }

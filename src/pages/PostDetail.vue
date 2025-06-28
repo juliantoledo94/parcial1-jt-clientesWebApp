@@ -75,6 +75,7 @@ export default {
 
             </span></p>
         <p class="mb-6">{{ post?.content }}</p>
+        <img :src="post?.photo" alt="">
     </section>
 
 

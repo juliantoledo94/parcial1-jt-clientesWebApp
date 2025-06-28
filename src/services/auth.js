@@ -3,21 +3,7 @@ import { deleteFile, getFileUrl, uploadFile } from "./storage";
 import supabase from "./supabase";
 import { createUserProfile, getUserProfileById, updateUserProfile } from "./user-profiles";
 
-/*
-    Para manejar la comunicación del estado de autenticación entre todos los elementos del sistema (componentes, módulos,
-    funciones, etc), vamos a usar el maravilloso patrón Observer.
 
-    # Patrón de diseño Observer
-    El patrón Observer define una relación de uno a muchos entre un Subject (sujeto) y múltiples Observers (observadores).
-    Los observadores son elementos del sistema (clases, componentes, módulos, funciones, etc) que están interesados en
-    los cambios ocurridos en el sujeto, que es otro elemento del sistema (clases, componentes, variables, etc).
-
-    En la práctica, se necesita que el sujeto lleve una lista de los "observers". Dicho de otra forma, el observer tiene
-    que pedirle al sujeto que se le notifique de los cambios que ocurre.
-    Este proceso de pedir ser notificado se suele llamar "subscription" (suscripción), aunque también lo pueden ver 
-    con el nombre de "listening" (escuchar) o "watch" (observar).
-*/
-// Definimos una variable que contenga los datos del usuario (esta sería el "subject").
 let user = {
     id: null,
     email: null,
@@ -27,14 +13,13 @@ let user = {
     photo: null,
 }
 
-// Definimos un array para guardar la lista de observers que quieren ser notificados de los cambios en "user".
+
 let observers = [];
 
-// Pedimos cargar la data actual del usuario.
+
 loadInitialUserState();
 
-//Verificamos is tenemos un usuario en localstorage que figure como auntenticado si existe los usamos para marcar 
-// al usuario como autenticado
+
 
 if (localStorage.getItem("user")) {
     user = JSON.parse(localStorage.getItem("user"));
