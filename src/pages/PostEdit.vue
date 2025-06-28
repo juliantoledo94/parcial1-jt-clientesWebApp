@@ -143,20 +143,20 @@ function handlePostImageChange(event) {
         rows="5" v-model="form.content" required></textarea>
     </div>
 
-    <div class="mb-4">
+    <div class="mb-4 w-1/2">
       <label for="image" class="block mb-2">Imagen del post</label>
       <input type="file" id="image"
         class="w-full p-2 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg"
         @change="handlePostImageChange" />
     </div>
 
-    <div v-if="image.objectUrl" class="mb-4">
-      <img :src="image.objectUrl" alt="Previsualización de la nueva imagen" class="w-full rounded-lg" />
+    <div v-if="image.objectUrl" class="mb-4 w-1/2">
+      <img :src="image.objectUrl" alt="Previsualización de la nueva imagen" class="w-full max-w-[200px] max-h-[200px] object-cover rounded-lg" />
     </div>
 
     <!-- Imagen original si no hay nueva seleccionada -->
-    <div v-else-if="post.photo" class="mb-4">
-      <img :src="post.photo" alt="Imagen actual del post" class="w-full rounded-lg" />
+    <div v-else-if="post.photo" class="mb-4 w-1/2">
+      <img :src="post.photo" alt="Imagen actual del post" class="w-full max-w-[200px] max-h-[200px] object-cover rounded-lg" />
     </div>
 
     <MainButton type="submit">
