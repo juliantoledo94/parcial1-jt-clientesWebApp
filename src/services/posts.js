@@ -1,6 +1,7 @@
 import { getExtensionFromFile } from "../libraries/helpers";
 import { deleteFile, getFileUrl, uploadFile } from "./storage";
 import supabase from "./supabase";
+import { getPostByIdWithUser } from './post-comments'
 
 /**
  * Crea un nuevo post en la base de datos y lo asocia al usuario que lo creó.
@@ -134,3 +135,53 @@ export async function updatePostImage(file, userId, oldPhotoUrl = null) {
 
 
 
+/**
+ * Escucha en tiempo real los nuevos posts creados y ejecuta el callback cuando se agregan.
+ * 
+ * @param {(post: object) => void} callback - Función que se ejecuta cuando hay un nuevo post.
+ */
+export function subscribeToNewPosts(callback) {
+  const channel = supabase.channel('posts-realtime', {
+    config: { broadcast: { self: true } },
+  });
+
+  channel.on(
+    'postgres_changes',
+    {
+      event: 'INSERT',
+      schema: 'public',
+      table: 'posts',
+    },
+    payload => callback(payload.new)
+  );
+
+  channel.subscribe();
+}
+
+
+/**
+ * Escucha en tiempo real nuevos posts agregados a la tabla 'posts'.
+ * Llama al callback cada vez que se inserta un nuevo post.
+ * 
+ * @param {(newPost: object) => void} callback - Función que recibe el nuevo post.
+ */
+export function subscribeToAllPosts(callback) {
+  const channel = supabase.channel('realtime-posts', {
+    config: { broadcast: { self: true } },
+  });
+
+  channel.on(
+    'postgres_changes',
+    {
+      event: 'INSERT',
+      schema: 'public',
+      table: 'posts',
+    },
+    async (payload) => {
+      const enrichedPost = await getPostByIdWithUser(payload.new.id);
+      callback(enrichedPost);
+    }
+  );
+
+  channel.subscribe();
+}

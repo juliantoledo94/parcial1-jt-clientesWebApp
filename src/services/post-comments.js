@@ -75,7 +75,7 @@ export function subscribeToPostComments(postId, callback){
 export async function getPostByIdWithUser(postId) {
     const { data, error } = await supabase
       .from('posts')
-      .select('*, user:user_profiles(display_name, email, id)')
+      .select('*, user:user_profiles(display_name, email, id, photo)')
       .eq('id', postId)
       .single();
   
@@ -87,3 +87,23 @@ export async function getPostByIdWithUser(postId) {
     return data;
   }
   
+
+export function subscribeToDeletedPosts(callback) {
+  const channel = supabase.channel('deleted-posts', {
+    config: { broadcast: { self: true } },
+  });
+
+  channel.on(
+    'postgres_changes',
+    {
+      event: 'DELETE',
+      schema: 'public',
+      table: 'posts',
+    },
+    (payload) => {
+      callback(payload.old.id); // solo pasamos el ID eliminado
+    }
+  );
+
+  channel.subscribe();
+}

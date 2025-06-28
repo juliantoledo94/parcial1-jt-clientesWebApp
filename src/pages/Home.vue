@@ -1,35 +1,30 @@
 <script setup>
 import { RouterLink } from 'vue-router';
 import MainH1 from '../components/MainH1.vue';
-import { getAllPosts } from '../services/posts';
+import { getAllPosts, subscribeToAllPosts } from '../services/posts';
 import { onMounted, ref } from 'vue';
+import { subscribeToDeletedPosts } from '../services/post-comments';
+
+
 
 const posts = ref([]);
 
 onMounted(async () => {
     try {
         posts.value = await getAllPosts();
+
+        subscribeToAllPosts(newPost => {
+            posts.value.unshift(newPost);
+        });
+         subscribeToDeletedPosts(deletedId => {
+      posts.value = posts.value.filter(p => p.id !== deletedId);
+    });
     } catch (error) {
         console.error("Error al cargar los posts en Home: ", error);
     }
 });
 
-/* export default {
-    name: 'Home',
-    components: { MainH1 },
-    data() {
-        return {
-            posts: [],
-        };
-    },
-    async mounted() {
-        try {
-            this.posts = await getAllPosts();
-        } catch (error) {
-            console.error("Error al cargar los posts en Home: ", error)
-        }
-    }
-} */
+
 </script>
 
 <template>
@@ -52,13 +47,15 @@ onMounted(async () => {
                 <div class=" overflow-hidden mb-4 w-50 h-50 rounded-full border-2 border-white bg-[#1f3d2e] mx-auto flex items-center justify-center  text-[#9ee37d] text-3xl font-bold "
                     style="font-family: 'Press Start 2P', cursive;">
 
-                    <RouterLink :to="`/usuario/${post.user?.id}`" class="w-full h-full  flex items-center justify-center "> <!-- el problema de las fotos esta aca en el router link que no ocupa el 100% -->
-                        
+                    <RouterLink :to="`/usuario/${post.user?.id}`"
+                        class="w-full h-full  flex items-center justify-center ">
+                        <!-- el problema de las fotos esta aca en el router link que no ocupa el 100% -->
+
 
                         <img v-if="post.user?.photo" :src="post.user.photo" alt="Foto de perfil"
                             class="w-full h-full object-cover object-center  transform scale-110" />
 
-                     
+
                         <span v-else class="">
                             {{ post.user?.email?.charAt(0).toUpperCase() }}
                         </span>

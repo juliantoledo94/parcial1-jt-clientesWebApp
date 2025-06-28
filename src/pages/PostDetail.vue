@@ -66,7 +66,7 @@ export default {
 <template>
     <MainH1>{{ post?.title }}</MainH1>
     <section class="p-6 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg ">
-        <div>
+        <div class="">
 
             <p class="mb-6 ">Creador <span class="text-blue-700">
                     <RouterLink :to="`/usuario/${user?.id}`">
@@ -78,7 +78,7 @@ export default {
                 </span></p>
             <p class="mb-6">{{ post?.content }}</p>
         </div>
-        <div>
+        <div class="">
 
             <img :src="post?.photo" alt="" class="w-full max-w-[300px] max-h-[300px] object-cover rounded-lg">
         </div>
