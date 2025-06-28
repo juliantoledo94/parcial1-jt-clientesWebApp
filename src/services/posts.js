@@ -121,7 +121,7 @@ export async function updatePostImage(file, userId, oldPhotoUrl = null) {
     const newPhotoUrl = getFileUrl(filename, "post-images");
 
     if (oldPhotoUrl) {
-      const photoToDelete = oldPhotoUrl.slice(oldPhotoUrl.indexOf("/post-images/") + 6);
+      const photoToDelete = oldPhotoUrl.slice(oldPhotoUrl.indexOf("/post-images/") + 13);
       await deleteFile(photoToDelete, "post-images");
     }
 
@@ -131,3 +131,6 @@ export async function updatePostImage(file, userId, oldPhotoUrl = null) {
     throw error;
   }
 }
+
+
+
