@@ -134,7 +134,7 @@ export async function updatePostImage(file, userId, oldPhotoUrl = null) {
 }
 
 
-/* A PARTIR DE ACA SE AGREGAN LAS CONTROLLERS PARA CREAR EDITAR Y ELIMINAR EN TIEMPO REAL */
+                                                                                /* A PARTIR DE ACA SE AGREGAN LAS CONTROLLERS PARA CREAR EDITAR Y ELIMINAR EN TIEMPO REAL */
 
 
 /**

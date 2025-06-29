@@ -142,7 +142,7 @@ export function subscribeToDeletedPosts(callback) {
       table: 'posts',
     },
     (payload) => {
-      callback(payload.old.id); // solo pasamos el ID eliminado
+      callback(payload.old.id); 
     }
   );
 

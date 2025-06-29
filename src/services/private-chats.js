@@ -1,12 +1,12 @@
 import supabase from "./supabase";
 
-// TODO:Optimizacion de performance para reducir la cantidad de peticiones(uso de caché).
+
 
 
 
 let privateChatIdsCache = {};
 
-//levantamos del cache los ids que tengamos almacenados
+
 if (localStorage.getItem("privateChatIds")) {
     privateChatIdsCache = JSON.parse(localStorage.getItem("privateChatIds"));
 }
@@ -43,7 +43,7 @@ async function getPrivateChat(sender_id, receiver_id) {
  */
 async function fetchPrivateChat(sender_id, receiver_id) {
 
-    //Ordenamos los ids para que simepre queden en un mismo orden
+    
 
     const userIds = [sender_id, receiver_id].sort();
 
@@ -60,7 +60,7 @@ async function fetchPrivateChat(sender_id, receiver_id) {
         throw error;
     }
 
-    // usamos el ? por si es undefined o null nos retorne justamente eso.
+    
     return data[0]?.id;
 }
 
@@ -142,7 +142,7 @@ export async function suscribeToPrivateNewMessages(sender_id, receiver_id, callb
 
         }
     );
-    //1:11 clase 13/05
+    
     privateChannel.subscribe()
 
 }

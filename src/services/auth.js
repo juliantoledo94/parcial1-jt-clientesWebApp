@@ -39,9 +39,7 @@ async function loadInitialUserState() {
         email: data.user.email,
     });
 
-    // Hay un usuario autenticado, así que dejamos pidiendo que se traigan los datos faltantes.
-    // Importante: Noten que NO pusimos el await. Dejamos que corra en paralelo.
-    // TODO: Hacer el editar perfil.
+   
     loadUserExtendedProfile();
 }
 
@@ -70,7 +68,7 @@ async function loadUserExtendedProfile() {
  * @param {string} password 
  */
 export async function register(email, password) {
-    // Creamos una cuenta usamos el método signUp() de auth de supabase.
+    
     const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -90,7 +88,7 @@ export async function register(email, password) {
         throw errorProfile;
     }
 
-    // Guardamos los datos del usuario autenticado y notificamos a los observers del cambio.
+    
     updateUser({
         id: data.user.id,
         email: data.user.email,
@@ -98,7 +96,7 @@ export async function register(email, password) {
 }
 
 export async function login(email, password) {
-    // Creamos una cuenta usamos el método signUp() de auth de supabase.
+    
     const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -109,7 +107,7 @@ export async function login(email, password) {
         throw error;
     }
 
-    // Guardamos los datos del usuario autenticado y notificamos a los observers del cambio.
+    
     updateUser({
         id: data.user.id,
         email: data.user.email,
@@ -123,7 +121,7 @@ export async function login(email, password) {
 export async function logout() {
     supabase.auth.signOut();
 
-    // Vaciamos los datos del usuario y notificamos a los observers del cambio.
+    
     updateUser({
         id: null,
         email: null,

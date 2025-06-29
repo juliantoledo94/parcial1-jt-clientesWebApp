@@ -29,7 +29,7 @@ export function getFileUrl(filename, bucket ="avatars"){
 }
 
 
-// min 35:53 17/06
+
 /**
  * 
  * @param {string} filename 

@@ -48,6 +48,6 @@ export async function getUserProfileById(id) {
         throw error;
     }
 
-    // Como solo puede llegar una fila (filtramos por la PK), entonces hard-codeamos que queremos el primer (y único) registro.
+   
     return data[0];
 }
