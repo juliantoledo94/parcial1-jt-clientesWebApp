@@ -16,7 +16,7 @@ const route = useRoute();
 const { user: userAuth } = useAuthUserState();
 const { user: userChat, loading: loadingUser } = useUserProfile(route.params.id);
 const { newMessage, sendMessage } = usePrivateChatForm(userAuth, userChat)
-/* const { messages, loading: loadingMessages } = usePrivateChatMessages(userAuth, route.params.id) */
+
 const { messages, loading: loadingMessages } = usePrivateChatMessages(userAuth, userChat)
 const chatContainer = ref(null);
 const { moveScrollToBottom } = useScrollToBottom(chatContainer);
@@ -79,79 +79,7 @@ function usePrivateChatForm(userAuth, userChat) {
     }
 }
 
-/* export default {
-    name: "PrivateChat",
-    components: { MainH1, MainLoader, MainButton },
-    data() {
-        return {
-            userAuth: {
-                id: null,
-                email: null,
-                display_name: null,
-                bio: null,
-                career: null,
 
-            },
-            userChat: {
-                id: null,
-                email: null,
-                display_name: null,
-                bio: null,
-                career: null,
-
-            },
-            loadingUser: false,
-
-            messages: [],
-
-            loadingMessage: false,
-
-            newMessage: {
-                body: "",
-            }
-        }
-    },
-    methods: {
-        async sendMessage() {
-            try {
-                sendPrivateChatMessage(this.userAuth.id, this.userChat.id, this.newMessage.body);
-                this.newMessage.body = "";
-            } catch (error) {
-
-            }
-
-        }
-    },
-    async mounted() {
-        try {
-            subscribeToUserState(newDataUser => this.userAuth = newDataUser);
-            this.loadingUser = true;
-            this.loadingMessage = true;
-
-
-            this.userChat = await getUserProfileById(this.$route.params.id);
-            this.loadingUser = false;
-            suscribeToPrivateNewMessages(this.userAuth.id, this.userChat.id, async newMessage => {
-
-                this.messages.push(newMessage);
-                await nextTick();
-                this.$refs.chatContainer.scrollTop = this.$refs.chatContainer.scrollHeight;
-
-            });
-            this.messages = await getLastPrivateChatMessages(this.userAuth.id, this.userChat.id);
-
-            this.loadingMessage = false;
-
-            await nextTick();
-            this.$refs.chatContainer.scrollTop = this.$refs.chatContainer.scrollHeight;
-
-        } catch (error) {
-
-        }
-    }
-
-}
- */
 
 </script>
 
@@ -188,7 +116,7 @@ function usePrivateChatForm(userAuth, userChat) {
 
 
             <form class="flex items-stretch gap-4" action="#" @submit.prevent="() => sendMessage()">
-                <!-- 32:32 -->
+                
                 <div class="w-full">
                     <label for="body" class="sr-only">Mensaje</label>
 
