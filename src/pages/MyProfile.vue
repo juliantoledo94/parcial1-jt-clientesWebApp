@@ -14,7 +14,7 @@ async function handleDelete(post) {
 
     try {
         await deletePost(post);
-        // Eliminarlo del array local de posts
+
         posts.value = posts.value.filter(p => p.id !== post.id);
     } catch (error) {
         alert('Error al eliminar el post.');
@@ -22,75 +22,8 @@ async function handleDelete(post) {
     }
 }
 
-/* function useAuthUserState() {
-    let unsubAuth = () => { };
 
-    const user = ref({
-        id: null,
-        email: null,
-        display_name: null,
-        bio: null,
-        career: null,
 
-    });
-
-    const posts = ref([]);
-
-    onMounted(() => {
-        unsubAuth = subscribeToUserState(async (newUserState) => {
-            user.value = newUserState;
-
-            if (user.value.id) {
-                try {
-                    posts.value = await getPostsByUserId(user.value.id);
-                } catch (error) {
-                    console.error("Error al obtener los posts del perfil:", error);
-                }
-            }
-        });
-    });
-    onUnmounted(unsubAuth);
-
-    return {
-        user,
-        posts,
-    }
-
-} */
-
-/* export default {
-    name: 'MyProfile',
-    components: { MainH1, },
-    data() {
-        return {
-            user: {
-                id: null,
-                email: null,
-                display_name: null,
-                bio: null,
-                career: null,
-            },
-            posts: []
-        }
-    },
-    mounted() {
-        unsubAuth = subscribeToUserState(async newUserState => {
-            this.user = newUserState
-
-            if (this.user.id) {
-                try {
-                    this.posts = await getPostsByUserId(this.user.id)
-                } catch (error) {
-                    console.error("Error al obtener los datos del perfil: ", error);
-                }
-            }
-
-        });
-    },
-    unmounted() {
-        unsubAuth();
-    }
-} */
 </script>
 
 <template>
@@ -114,12 +47,12 @@ async function handleDelete(post) {
                 <img v-if="user.photo" :src="user.photo" alt="Foto de perfil"
                     class="w-full h-full object-cover object-center" />
 
-                <!-- Inicial si no hay foto -->
+
                 <span v-else>
                     {{ user.email?.charAt(0).toUpperCase() }}
                 </span>
 
-                <!-- {{ user?.email?.charAt(0).toUpperCase() }} -->
+
 
             </div>
             {{ user.bio || 'Acá va mi biografía...' }}
@@ -158,20 +91,26 @@ async function handleDelete(post) {
     <section class="mt-12">
         <h2 class="text-xl font-semibold mb-4">Mis posteos</h2>
 
-        <div v-if="posts.length === 0" class="italic text-gray-500">
+        <div v-if="user?.id && posts.length === 0" class="italic text-gray-500">
+            Cargando posteos...
+        </div>
+
+
+        <div v-else-if="posts.length === 0" class="italic text-gray-500">
             Todavía no tenés ningún post.
         </div>
 
         <div v-else class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <div v-for="post in posts" :key="post.id"
                 class="p-6 rounded-xl border border-gray-300 bg-white/80 backdrop-blur-sm shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_25px_rgba(0,0,0,0.25)] transition duration-300 hover:-translate-y-1 hover:scale-100">
-                <!-- Botón Editar -->
+
+
                 <RouterLink :to="`/mi-perfil/editar-post/${post.id}`"
                     class=" top-2 left-2 text-blue-600 hover:text-blue-800 text-sm font-bold">
                     Editar
                 </RouterLink>
 
-                <!-- Botón Eliminar -->
+
                 <button @click="handleDelete(post)"
                     class=" top-2 right-2 text-red-600 hover:text-red-800 text-sm font-bold">
                     Eliminar
@@ -182,7 +121,7 @@ async function handleDelete(post) {
                     <RouterLink :to="`/post/${post.id}`" class="text-lg font-bold mb-1 hover:underline block">
                         {{ post.title }}
                     </RouterLink>
-                    <!-- {{ post.title }} -->
+
 
                 </h3>
 
