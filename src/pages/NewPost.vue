@@ -7,7 +7,7 @@ import useAuthUserState from '../composables/useAuthUserState';
 import { onMounted } from 'vue';
 import { getPostsByUserId, createNewPost, updatePostImage } from '../services/posts';
 
-import { getExtensionFromFile } from '../libraries/helpers';
+
 
 
 const { user, posts } = useAuthUserState();
@@ -115,143 +115,6 @@ function usePostUploadForm() {
   };
 }
 
-/* const { user, posts } = useAuthUserState();
-
-const post = ref({
-  title: '',
-  content: '',
-});
-
-const submitting = ref(false);
-
-const feedback = ref({
-  type: 'success',
-  message: null,
-});
-
-const image = ref({
-  file: null,
-  objectUrl: null,
-});
-
-
-
-async function handleSubmit() {
-  feedback.value.message = null;
-
-  if (!user.value.id) {
-    feedback.value = {
-      type: 'error',
-      message: 'Usuario no autenticado.',
-    };
-    return;
-  }
-
-  try {
-    submitting.value = true;
-
-
-
-    await createNewPost({
-      user_id: user.value.id,
-      title: post.value.title,
-      content: post.value.content,
-      created_at: new Date().toISOString(),
-    });
-
-    feedback.value = {
-      type: 'success',
-      message: 'El post se creó con éxito.',
-    };
-
-    // limpiar formulario y actualizar posts del perfil
-    post.value.title = '';
-    post.value.content = '';
-
-    posts.value = await getPostsByUserId(user.value.id);
-  } catch (error) {
-    feedback.value = {
-      type: 'error',
-      message: 'Ocurrió un error al crear el post.',
-    };
-  }
-
-  submitting.value = false;
-} */
-
-/* let unsubAuth = () => {}
-
-export default {
-  name: 'NewPost',
-  components: { MainH1, MainButton, MainLoader },
-  data() {
-    return {
-      user: {
-        id: null,
-        email: null,
-        display_name: null,
-        bio: null,
-        career: null,
-      },
-      post: {
-        title: '',
-        content: '',
-      },
-      submitting: false,
-      feedback: {
-        type: 'success',
-        message: null,
-      }
-    }
-  },
-  methods: {
-    async handleSubmit() {
-      this.feedback.message = null;
-
-      if (!this.user.id) {
-        this.feedback = {
-          type: 'error',
-          message: 'Usuario no autenticado.',
-        };
-        return;
-      }
-
-      try {
-        this.submitting = true;
-        await createNewPost({
-          user_id: this.user.id,
-          title: this.post.title,
-          content: this.post.content,
-          created_at: new Date().toISOString(),
-        });
-        this.submitting = false;
-
-        this.feedback = {
-          type: 'success',
-          message: 'El post se creó con éxito.',
-        };
-
-        // Limpiar formulario
-        this.post.title = '';
-        this.post.content = '';
-      } catch (error) {
-        this.feedback = {
-          type: 'error',
-          message: 'Ocurrió un error al crear el post.',
-        };
-        this.submitting = false;
-      }
-    }
-  },
-  mounted() {
-    unsubAuth = subscribeToUserState(newUser => {
-      this.user = newUser;
-    });
-  },
-  unmounted() {
-    unsubAuth();
-  }
-} */
 </script>
 
 <template>
@@ -282,7 +145,7 @@ export default {
 
       <div class="mb-4">
 
-        <label for="image" class="block mb-2 text-white">Nueva imagen de perfil</label>
+        <label for="image" class="block mb-2 ">Imagen del post (opcional)</label>
 
         <input type="file" id="image"
           class="w-full p-2 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg"
