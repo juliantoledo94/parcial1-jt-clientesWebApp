@@ -40,14 +40,13 @@ function useAvatarUploadForm() {
 
         const selectedFile = event.target.files[0];
 
-        console.log("Archivos del input: ", event.target.files);
-        console.log("El archivo seleccionado: ", selectedFile);
+        
 
         if (!selectedFile) return;
 
         avatar.value.file = selectedFile;
 
-        /*  preguntamos si hay objetUrl viejos para revocarlos y evitar memoryleaks */
+        
 
         if (avatar.value.objectUrl) {
             URL.revokeObjectURL(avatar.value.objectUrl);
