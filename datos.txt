@@ -6,4 +6,4 @@ Turno: Noche
 Comisión: DW202300
 Apellido y Nombre: Toledo Julian David
 Docente:  Gallino Santiago
-Carácter de entrega: 1er parcial
+Carácter de entrega: 2do parcial
