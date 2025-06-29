@@ -4,12 +4,15 @@ import { getPostByIdWithUser, loadCommentsForPost, saveComment, subscribeToPostC
 import { getPostsByUserId } from '../services/posts';
 import { subscribeToUserState } from '../services/auth';
 import supabase from '../services/supabase';
+import MainLoader from '../components/MainLoader.vue';
+
+
 
 let unsubAuth = () => { };
 
 export default {
     name: 'PostDetail',
-    components: { MainH1 },
+    components: { MainH1, MainLoader },
     data() {
         return {
             post: null,
@@ -19,6 +22,8 @@ export default {
                 id: null,
                 email: null,
             },
+            loading: true
+
         };
     },
     async mounted() {
@@ -37,6 +42,8 @@ export default {
         subscribeToPostComments(postId, newComment => {
             this.comments.push(newComment);
         });
+
+        this.loading = false;
     },
     methods: {
         async submitComment() {
@@ -52,9 +59,10 @@ export default {
 
             await saveComment(commentData);
 
-            this.comments.push(commentData);
+            /* this.comments.push(commentData); */
             this.newComment = '';
         }
+
 
     },
     unmounted() {
@@ -65,6 +73,7 @@ export default {
 
 <template>
     <MainH1>{{ post?.title }}</MainH1>
+    <MainLoader v-if="loading" class="mx-auto my-10" />
     <section class="p-6 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg ">
         <div class="">
 
@@ -72,9 +81,9 @@ export default {
                     <RouterLink :to="`/usuario/${user?.id}`">
                         {{ post?.user?.display_name || post?.user?.email ||
                             'Desconocido' }}
-    
+
                     </RouterLink>
-    
+
                 </span></p>
             <p class="mb-6">{{ post?.content }}</p>
         </div>
@@ -88,13 +97,15 @@ export default {
     <section class="mt-8">
         <h2 class="text-xl font-semibold mb-4">Comentarios</h2>
 
-        <div v-if="comments.length === 0" class="italic text-grey">Sin comentarios aún.</div>
+
+
 
         <ul class="space-y-3 mb-6">
-            <li v-for="comment in comments" :key="comment.id" class=" p-3 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg ">
-                <p class="font-bold text-sm text-blue-700">
+            <li v-for="comment in comments" :key="comment.id"
+                class=" p-3 rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg ">
+                <RouterLink :to="`/usuario/${comment.user_id}`" class="font-bold text-sm text-blue-700 hover:underline">
                     {{ comment.email || 'Usuario desconocido' }}
-                </p>
+                </RouterLink>
                 <p class="mt-1">{{ comment.content }}</p>
                 <p class="text-xs text-white mt-1">{{ new Date(comment.created_at).toLocaleString() }}</p>
             </li>
@@ -102,8 +113,10 @@ export default {
 
 
         <form @submit.prevent="submitComment" class="space-y-2 ">
-            <label for="newComment " class="mb-3" style="font-family: 'Press Start 2P', cursive;">Agregar comentario:</label>
-            <textarea id="newComment" v-model="newComment" class="w-full p-2  rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg" rows="3"></textarea>
+            <label for="newComment" class="mb-3">Agregar comentario:</label>
+            <textarea id="newComment" v-model="newComment"
+                class="w-full p-2  rounded-xl border border-white/30 bg-white/10 backdrop-blur-md shadow-lg"
+                rows="3"></textarea>
             <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500">Comentar</button>
         </form>
     </section>
