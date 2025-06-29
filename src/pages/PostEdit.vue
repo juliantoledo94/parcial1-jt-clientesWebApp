@@ -46,7 +46,7 @@ onMounted(async () => {
   try {
     const data = await getPostByIdWithUser(postId);
 
-    // Validar que el post sea del usuario actual
+    
     if (data.user_id !== user.value.id) {
       feedback.value = {
         type: 'error',
@@ -91,9 +91,7 @@ async function handleSubmit() {
       message: 'Publicación actualizada con éxito.',
     };
 
-    /*  setTimeout(() => {
-       router.push('/mi-perfil');
-     }, 1000); */
+   
 
   } catch (error) {
     feedback.value = {
@@ -154,7 +152,7 @@ function handlePostImageChange(event) {
       <img :src="image.objectUrl" alt="Previsualización de la nueva imagen" class="w-full max-w-[200px] max-h-[200px] object-cover rounded-lg" />
     </div>
 
-    <!-- Imagen original si no hay nueva seleccionada -->
+   
     <div v-else-if="post.photo" class="mb-4 w-1/2">
       <img :src="post.photo" alt="Imagen actual del post" class="w-full max-w-[200px] max-h-[200px] object-cover rounded-lg" />
     </div>
