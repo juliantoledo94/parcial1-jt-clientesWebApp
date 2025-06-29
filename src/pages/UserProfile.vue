@@ -12,76 +12,7 @@ const router = useRoute();
 const { user, loading, posts } = useUserProfile(router.params.id)
 
 
-//Funcion migro a composable.
-/* function useUserProfile(id) {
 
-    const user = ref({
-        id: null,
-        email: null,
-        bio: null,
-        display_name: null,
-        career: null,
-    });
-
-    const loading = ref(false); // ← corregido el typo
-    const posts = ref([]);
-
-    onMounted(async () => {
-        try {
-            loading.value = true;
-
-            user.value = await getUserProfileById(id);
-            posts.value = await getPostsByUserId(id);
-            loading.value = false;
-        } catch (error) {
-            console.error("Error: ", error)
-            throw error;
-        }
-    });
-
-    return {
-        user,
-        loading,
-        posts,
-    }
-
-} */
-
-
-//API OPCIONES
-/* export default {
-    name: 'UserProfile',
-    components: { MainH1, MainLoader },
-    data() {
-        return {
-            user: {
-                id: null,
-                email: null,
-                display_name: null,
-                bio: null,
-                career: null,
-            },
-            loading: false,
-            posts: [],
-        }
-    },
-    async mounted() {
-        try {
-            this.loading = true;
-            // Recapitulando: Cuando usamos Vue Router con la Options API, se nos generan automáticamente 2 variables:
-            // $router y $route.
-            // Contienen la referencia al objeto del Router y al objeto de la ruta en la que estamos, respectivamente.
-            const userId = this.$route.params.id;
-            this.user = await getUserProfileById(userId);
-            this.posts = await getPostsByUserId(userId);
-            this.loading = false;
-            this.loading = false;
-        } catch (error) {
-            console.error("Error al cargar perfil del usuario: ", error);
-            this.loading = false;
-        }
-    },
-} */
 </script>
 
 <template>
@@ -95,12 +26,12 @@ const { user, loading, posts } = useUserProfile(router.params.id)
                     <img v-if="user.photo" :src="user.photo" alt="Foto de perfil"
                         class="w-full h-full object-cover object-center" />
 
-                    <!-- Inicial si no hay foto -->
+                    
                     <span v-else>
                         {{ user.email?.charAt(0).toUpperCase() }}
                     </span>
 
-                    <!--   {{ user?.email?.charAt(0).toUpperCase() }} -->
+                  
 
                 </div>
                 {{ user.bio || 'Acá va mi biografía...' }}
@@ -137,7 +68,7 @@ const { user, loading, posts } = useUserProfile(router.params.id)
                         <RouterLink :to="`/post/${post.id}`" class="text-lg font-bold mb-1 hover:underline block">
                             {{ post.title }}
                         </RouterLink>
-                        <!-- {{ post.title }} -->
+                       
 
                     </h3>
                     <p class="text-gray-700 mt-2">{{ post.content }}</p>

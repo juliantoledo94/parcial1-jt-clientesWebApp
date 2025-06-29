@@ -20,7 +20,7 @@ function useRegisterForm() {
             loading.value = true;
             await register(user.value.email, user.value.password);
         } catch (error) {
-            console.error("error: ", error)
+            console.error("Error al registrarse:", error.message);
             throw error;
         }
         loading.value = false;
@@ -34,30 +34,7 @@ return {
 
 }
 
-/* export default {
-    name: 'Register',
-    components: { MainH1 },
-    data() {
-        return {
-            user: {
-                email: '',
-                password: '',
-            },
-            loading: false,
-        }
-    },
-    methods: {
-        async handleSubmit() {
-            try {
-                this.loading = true;
-                await register(this.user.email, this.user.password);
-                this.loading = false;
-            } catch (error) {
-                // TODO: Manejar el error.
-            }
-        },
-    }
-} */
+
 </script>
 
 <template>
