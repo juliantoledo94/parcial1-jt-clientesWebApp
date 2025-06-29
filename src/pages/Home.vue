@@ -4,14 +4,16 @@ import MainH1 from '../components/MainH1.vue';
 import { getAllPosts, subscribeToAllPosts, subscribeToUpdatedPosts } from '../services/posts';
 import { onMounted, ref } from 'vue';
 import { subscribeToDeletedPosts } from '../services/post-comments';
+import useAuthUserState from '../composables/useAuthUserState';
 
-
-
+const { user } = useAuthUserState();
 const posts = ref([]);
+const isLoading = ref(true)
 
 onMounted(async () => {
     try {
         posts.value = await getAllPosts();
+        isLoading.value = false;
 
         subscribeToAllPosts(newPost => {
             posts.value.unshift(newPost);
@@ -27,6 +29,7 @@ onMounted(async () => {
         });
     } catch (error) {
         console.error("Error al cargar los posts en Home: ", error);
+        isLoading.value = false;
     }
 });
 
@@ -37,10 +40,20 @@ onMounted(async () => {
     <MainH1>¡Les damos la bienvenida a Comunidad G!</MainH1>
 
     <section class="mt-12">
-        <h2 class="text-xl font-semibold mb-4 text-white drop-shadow-[1px_1px_1px_rgba(0,0,0,0.7)]">Últimas
-            publicaciones</h2>
+        <div class="flex justify-between">
 
-        <div v-if="posts.length === 0" class="italic text-gray-500">
+            <h2 class="text-xl font-semibold mb-4 text-white drop-shadow-[1px_1px_1px_rgba(0,0,0,0.7)]">Últimas
+                publicaciones</h2>
+            <RouterLink v-if="user?.id" to="/mi-perfil/new-post"
+                class="inline-block mb-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">
+                Crear publicación
+            </RouterLink>
+        </div>
+
+        <div v-if="isLoading" class="text-center text-gray-400 italic">Cargando publicaciones...</div>
+
+
+        <div v-else-if="posts.length === 0" class="italic text-gray-500">
             No hay publicaciones todavía.
         </div>
 
@@ -55,7 +68,7 @@ onMounted(async () => {
 
                     <RouterLink :to="`/usuario/${post.user?.id}`"
                         class="w-full h-full  flex items-center justify-center ">
-                        <!-- el problema de las fotos esta aca en el router link que no ocupa el 100% -->
+
 
 
                         <img v-if="post.user?.photo" :src="post.user.photo" alt="Foto de perfil"
@@ -65,7 +78,7 @@ onMounted(async () => {
                         <span v-else class="">
                             {{ post.user?.email?.charAt(0).toUpperCase() }}
                         </span>
-                        <!-- {{ post.user?.email.charAt(0).toUpperCase() }} -->
+
                     </RouterLink>
                 </div>
                 <div class="bg-white/90 rounded-lg p-4 shadow-inner">
