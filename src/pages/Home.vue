@@ -97,7 +97,7 @@ onMounted(async () => {
                     </p>
 
                     <p class="text-gray-700 line-clamp-3">{{ post.content }}</p>
-                    <p class="text-xs text-gray-400 mt-2">{{ new Date(post.created_at).toLocaleString() }}</p>
+                    <p class="text-xs text-gray-800 mt-2">{{ new Date(post.created_at).toLocaleString() }}</p>
                 </div>
             </div>
         </div>

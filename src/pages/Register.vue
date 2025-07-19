@@ -2,9 +2,10 @@
 import { ref } from 'vue';
 import MainH1 from '../components/MainH1.vue';
 import { register } from '../services/auth';
+import MainLoader from '../components/MainLoader.vue';
 
 
-const {user, loading, handleSubmit} = useRegisterForm()
+const { user, loading, handleSubmit } = useRegisterForm()
 
 function useRegisterForm() {
 
@@ -21,16 +22,16 @@ function useRegisterForm() {
             await register(user.value.email, user.value.password);
         } catch (error) {
             console.error("Error al registrarse:", error.message);
-            throw error;
+            /* throw error; */
         }
         loading.value = false;
     }
 
-return {
-    user,
-    loading,
-    handleSubmit
-}
+    return {
+        user,
+        loading,
+        handleSubmit
+    }
 
 }
 
@@ -39,6 +40,8 @@ return {
 
 <template>
     <MainH1>Crear una nueva cuenta</MainH1>
+
+    <MainLoader v-if="loading" class="mx-auto my-10" />
 
     <form action="#" @submit.prevent="handleSubmit">
         <div class="mb-4">
