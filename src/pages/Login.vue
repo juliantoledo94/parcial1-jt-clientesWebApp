@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import MainH1 from '../components/MainH1.vue';
 import { login } from '../services/auth';
+import MainLoader from '../components/MainLoader.vue';
 
 
 //API COMPOSICIÓN
@@ -24,7 +25,7 @@ function useLoginForm() {
             await login(user.value.email, user.value.password);
         } catch (error) {
             console.error("error: ", error)
-            throw error;
+            /* throw error; */
         }
         loading.value = false
     }
@@ -42,6 +43,7 @@ function useLoginForm() {
 <template>
     <MainH1>Ingresar a mi cuenta</MainH1>
 
+    <MainLoader v-if="loading" class="mx-auto my-10" />
 
     <form action="#" @submit.prevent="handleSubmit">
         <div class="mb-4">

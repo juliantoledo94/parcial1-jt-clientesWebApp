@@ -41,11 +41,11 @@ async function handleDelete(post) {
 
 
 
-        <div class=" italic text-white drop-shadow-[1px_1px_1px_rgba(0,0,0,0.7)] flex items-center">
-            <div class="overflow-hidden w-50 h-50 rounded-full border-2 border-white bg-[#1f3d2e] flex items-center justify-center  text-[#9ee37d] text-3xl font-bold me-5 mb-3"
+        <div class=" italic text-black  flex items-center">
+            <div class="overflow-hidden w-50 h-50 rounded-full border-2 drop-shadow-[1px_1px_1px_rgba(0,0,0,0.7)] border-white bg-[#1f3d2e] flex items-center justify-center  text-[#9ee37d] text-3xl font-bold me-5 mb-3"
                 style="font-family: 'Press Start 2P', cursive;">
                 <img v-if="user.photo" :src="user.photo" alt="Foto de perfil"
-                    class="w-full h-full object-cover object-center" />
+                    class="w-full h-full object-cover object-center " />
 
 
                 <span v-else>
