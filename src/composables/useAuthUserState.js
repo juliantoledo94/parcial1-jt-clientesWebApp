@@ -18,6 +18,7 @@ export default function useAuthUserState() {
         bio: null,
         career: null,
         photo: null,
+        is_admin: false,
 
     });
 

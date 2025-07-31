@@ -47,7 +47,7 @@ onMounted(async () => {
     const data = await getPostByIdWithUser(postId);
 
     
-    if (data.user_id !== user.value.id) {
+    if (data.user_id !== user.value.id && !user.value.is_admin) {
       feedback.value = {
         type: 'error',
         message: 'No tenés permisos para editar este post.',

@@ -55,6 +55,7 @@ async function loadUserExtendedProfile() {
             bio: profileData.bio,
             career: profileData.career,
             photo: profileData.photo,
+            is_admin: profileData.is_admin
         });
     } catch (error) {
         console.error('[auth.js loadUserExtendedProfile] Error al traer el perfil extendido del usuario: ', error);
