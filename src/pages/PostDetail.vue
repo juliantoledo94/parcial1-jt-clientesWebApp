@@ -7,6 +7,7 @@ import supabase from '../services/supabase';
 import MainLoader from '../components/MainLoader.vue';
 import { deleteComment } from '../services/post-comments';
 import { subscribeToDeletedComments } from '../services/post-comments';
+import { updateComment, subscribeToUpdatedComments } from '../services/post-comments';
 
 
 
@@ -24,7 +25,9 @@ export default {
                 id: null,
                 email: null,
             },
-            loading: true
+            loading: true,
+            editingCommentId: null,
+            editedContent: '',
 
         };
     },
@@ -50,6 +53,16 @@ export default {
         subscribeToDeletedComments(deletedId => {
             this.comments = this.comments.filter(c => c.id !== deletedId);
         });
+
+        subscribeToUpdatedComments(postId, updatedComment => {
+            const index = this.comments.findIndex(c => c.id === updatedComment.id);
+            if (index !== -1) {
+                this.comments[index] = updatedComment;
+            }
+        });
+
+
+
 
 
         this.loading = false;
@@ -81,7 +94,18 @@ export default {
                 alert("Error al eliminar comentario");
                 console.error("Error al eliminar comentario:", error);
             }
+        },
+        async saveEditedComment(commentId) {
+            try {
+                await updateComment(commentId, this.editedContent);
+                this.editingCommentId = null;
+                this.editedContent = '';
+            } catch (error) {
+                alert("Error al editar comentario");
+                console.error("Error al editar comentario:", error);
+            }
         }
+
 
 
 
@@ -127,13 +151,29 @@ export default {
                 <RouterLink :to="`/usuario/${comment.user_id}`" class="font-bold text-sm text-blue-700 hover:underline">
                     {{ comment.email || 'Usuario desconocido' }}
                 </RouterLink>
-                <p class="mt-1">{{ comment.content }}</p>
+                <div v-if="editingCommentId === comment.id">
+                    <textarea v-model="editedContent" class="w-full p-2 rounded mt-2 border-black"></textarea>
+                    <div class="flex gap-2 mt-1">
+                        <button @click="saveEditedComment(comment.id)"
+                            class="text-green-500 text-sm hover:underline">Guardar</button>
+                        <button @click="editingCommentId = null"
+                            class="text-gray-400 text-sm hover:underline">Cancelar</button>
+                    </div>
+                </div>
+                <p v-else class="mt-1">{{ comment.content }}</p>
+
                 <p class="text-xs text-black mt-1">{{ new Date(comment.created_at).toLocaleString() }}</p>
 
                 <div v-if="user?.id === comment.user_id || user?.is_admin" class="mt-2">
                     <button @click="deleteComment(comment.id)"
                         class="text-red-500 text-sm hover:underline cursor-pointer">
                         Eliminar
+                    </button>
+                    <button @click="() => {
+                        editingCommentId = comment.id;
+                        editedContent = comment.content;
+                    }" class="text-green-500 text-sm hover:underline cursor-pointer ps-3">
+                        Editar
                     </button>
                 </div>
             </li>

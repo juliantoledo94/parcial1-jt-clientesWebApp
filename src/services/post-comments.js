@@ -168,7 +168,13 @@ export async function deleteComment(commentId) {
   }
 }
 
-
+/**
+ * Escucha en tiempo real los comentarios eliminados de un post específico.
+ * Cuando se detecta un comentario eliminado, se llama al callback con su ID.
+ *
+ * @param {string} postId - ID del post a observar.
+ * @param {(commentId: string) => void} callback - Función que recibe el ID del comentario eliminado.
+ */
 export function subscribeToDeletedComments(callback) {
   const channel = supabase.channel('deleted-comments', {
     config: { broadcast: { self: true } },
@@ -183,6 +189,66 @@ export function subscribeToDeletedComments(callback) {
     },
     (payload) => {
       callback(payload.old.id);
+    }
+  );
+
+  return channel.subscribe();
+}
+
+/**
+ * Actualiza el contenido de un comentario específico.
+ * 
+ * @param {string} commentId - ID del comentario.
+ * @param {string} newContent - Nuevo contenido del comentario.
+ * @returns {Promise<void>}
+ */
+export async function updateComment(commentId, newContent) {
+  const { error } = await supabase
+    .from("comments")
+    .update({ content: newContent })
+    .eq("id", commentId);
+
+  if (error) {
+    console.error("[post-comments.js updateComment] Error:", error);
+    throw error;
+  }
+}
+
+/**
+ * Escucha en tiempo real los comentarios editados (UPDATE) de un post específico.
+ * Cuando se detecta un comentario editado, se enriquece con los datos del usuario y se pasa al callback.
+ *
+ * @param {string} postId 
+ * @param {(updatedComment: object) => void} callback 
+ */
+export function subscribeToUpdatedComments(postId, callback) {
+  const channel = supabase.channel(`updated-comments-${postId}`, {
+    config: { broadcast: { self: true } },
+  });
+
+  channel.on(
+    'postgres_changes',
+    {
+      event: 'UPDATE',
+      schema: 'public',
+      table: 'comments',
+      filter: `post_id=eq.${postId}`,
+    },
+    async (payload) => {
+      const { id } = payload.new;
+
+      const { data, error } = await supabase
+        .from("comments")
+        .select("*, user:user_profiles(display_name,email,id)")
+        .eq("id", id)
+        .single();
+
+      if (error) {
+        console.error("[subscribeToUpdatedComments] Error al enriquecer comentario editado:", error);
+        return;
+      }
+
+      callback(data);
     }
   );
 
