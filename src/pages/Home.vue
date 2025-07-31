@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink } from 'vue-router';
 import MainH1 from '../components/MainH1.vue';
-import { getAllPosts, subscribeToAllPosts, subscribeToUpdatedPosts } from '../services/posts';
+import { deletePost, getAllPosts, subscribeToAllPosts, subscribeToUpdatedPosts } from '../services/posts';
 import { onMounted, ref } from 'vue';
 import { subscribeToDeletedPosts } from '../services/post-comments';
 import useAuthUserState from '../composables/useAuthUserState';
@@ -9,6 +9,19 @@ import useAuthUserState from '../composables/useAuthUserState';
 const { user } = useAuthUserState();
 const posts = ref([]);
 const isLoading = ref(true)
+
+async function handleDelete(post) {
+    if (!confirm('¿Seguro que querés eliminar este post?')) return;
+
+    try {
+        await deletePost(post);
+        posts.value = posts.value.filter(p => p.id !== post.id);
+    } catch (error) {
+        alert('Error al eliminar el post.');
+        console.error('[Home.vue delete]', error);
+    }
+}
+
 
 onMounted(async () => {
     try {
@@ -98,6 +111,17 @@ onMounted(async () => {
 
                     <p class="text-gray-700 line-clamp-3">{{ post.content }}</p>
                     <p class="text-xs text-gray-800 mt-2">{{ new Date(post.created_at).toLocaleString() }}</p>
+
+                    <div v-if="user?.is_admin" class="flex justify-between mt-2">
+                        <RouterLink :to="`/mi-perfil/editar-post/${post.id}`"
+                            class="text-blue-600 hover:text-blue-800 text-sm font-bold">
+                            Editar
+                        </RouterLink>
+
+                        <button @click="handleDelete(post)" class="text-red-600 hover:text-red-800 text-sm font-bold">
+                            Eliminar
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
