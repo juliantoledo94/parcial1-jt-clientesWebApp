@@ -5,6 +5,8 @@ import { getPostsByUserId } from '../services/posts';
 import { subscribeToUserState } from '../services/auth';
 import supabase from '../services/supabase';
 import MainLoader from '../components/MainLoader.vue';
+import { deleteComment } from '../services/post-comments';
+import { subscribeToDeletedComments } from '../services/post-comments';
 
 
 
@@ -39,9 +41,16 @@ export default {
 
         this.comments = await loadCommentsForPost(postId);
 
+
+
         subscribeToPostComments(postId, newComment => {
             this.comments.push(newComment);
         });
+
+        subscribeToDeletedComments(deletedId => {
+            this.comments = this.comments.filter(c => c.id !== deletedId);
+        });
+
 
         this.loading = false;
     },
@@ -61,7 +70,19 @@ export default {
 
             /* this.comments.push(commentData); */
             this.newComment = '';
+        },
+        async deleteComment(commentId) {
+            if (!confirm("¿Seguro que querés eliminar este comentario?")) return;
+
+            try {
+                await deleteComment(commentId);
+                this.comments = this.comments.filter(c => c.id !== commentId);
+            } catch (error) {
+                alert("Error al eliminar comentario");
+                console.error("Error al eliminar comentario:", error);
+            }
         }
+
 
 
     },
@@ -107,7 +128,14 @@ export default {
                     {{ comment.email || 'Usuario desconocido' }}
                 </RouterLink>
                 <p class="mt-1">{{ comment.content }}</p>
-                <p class="text-xs text-white mt-1">{{ new Date(comment.created_at).toLocaleString() }}</p>
+                <p class="text-xs text-black mt-1">{{ new Date(comment.created_at).toLocaleString() }}</p>
+
+                <div v-if="user?.id === comment.user_id || user?.is_admin" class="mt-2">
+                    <button @click="deleteComment(comment.id)"
+                        class="text-red-500 text-sm hover:underline cursor-pointer">
+                        Eliminar
+                    </button>
+                </div>
             </li>
         </ul>
 

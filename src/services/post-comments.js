@@ -148,3 +148,44 @@ export function subscribeToDeletedPosts(callback) {
 
   channel.subscribe();
 }
+
+
+/**
+ * Elimina un comentario por su ID.
+ * 
+ * @param {string} commentId - ID del comentario a eliminar.
+ * @returns {Promise<void>}
+ */
+export async function deleteComment(commentId) {
+  const { error } = await supabase
+    .from("comments")
+    .delete()
+    .eq("id", commentId);
+
+  if (error) {
+    console.error("[post-comments.js deleteComment] Error:", error);
+    throw error;
+  }
+}
+
+
+export function subscribeToDeletedComments(callback) {
+  const channel = supabase.channel('deleted-comments', {
+    config: { broadcast: { self: true } },
+  });
+
+  channel.on(
+    'postgres_changes',
+    {
+      event: 'DELETE',
+      schema: 'public',
+      table: 'comments',
+    },
+    (payload) => {
+      callback(payload.old.id);
+    }
+  );
+
+  return channel.subscribe();
+}
+
